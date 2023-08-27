@@ -8,7 +8,7 @@ import Mountain2 from "@/assets/mountains2.png";
 import Grass from "@/assets/grass.png";
 
 export const ParallaxAnimation = () => {
-  const target = useRef(null);
+  const target = useRef();
   const mountain1 = useParallax({
     translateY: ["-35vh", "35vh"],
     shouldAlwaysCompleteAnimation: true,
@@ -28,13 +28,13 @@ export const ParallaxAnimation = () => {
       </div>
       <div
         className="h-screen w-screen absolute top-[70vh]"
-        ref={mountain1.ref}
+        ref={mountain1.ref as React.RefObject<HTMLDivElement>}
       >
         <Image src={Mountain1} fill style={{ objectFit: "cover" }} alt={""} />
       </div>
       <div
         className="h-screen w-screen absolute top-[73vh]"
-        ref={mountain2.ref}
+        ref={mountain2.ref as React.RefObject<HTMLDivElement>}
       >
         <Image src={Mountain2} fill style={{ objectFit: "cover" }} alt={""} />
       </div>
