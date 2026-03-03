@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.parallax-page {
+  min-height: 100vh;
+  background: #d9ecff;
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  will-change: transform;
+}
+
+.layer-base {
+  background: #d9ecff;
+  height: 100vh;
+  z-index: 1;
+}
+
+.layer-far {
+  background: #b7d8ff;
+  height: 70vh;
+  bottom: 0;
+  opacity: 1;
+  z-index: 2;
+}
+
+.layer-front {
+  background: #0b1b6f;
+  height: 20vh;
+  bottom: 0;
+  opacity: 1;
+  z-index: 5;
+}
+
+.layer-mid {
+  background: #78b2ff;
+  height: 65vh;
+  bottom: 0;
+  opacity: 1;
+  z-index: 3;
+}
+
+.layer-near {
+  background: #2a63cc;
+  height: 42vh;
+  bottom: 0;
+  opacity: 1;
+  z-index: 4;
+}
+
+.layer-side {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: 0;
+  bottom: auto;
+  width: 28vw;
+  min-width: 220px;
+  height: 140vh;
+  will-change: transform;
+  background: #000000;
+  opacity: 1;
+  z-index: 6;
+}
+
+.scroll-track {
+  height: 220vh;
+}

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-
-// These styles apply to every route in the application
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Anna Papros - Portfolio",
+  title: "Hello",
+  description: "Minimal page",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <body>{children}</body>
