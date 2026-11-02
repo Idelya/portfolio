@@ -28,7 +28,8 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
 - [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
 - [ ] Metadata helpers, `sitemap.ts`, `robots.ts`, OG image, JSON-LD `Person`
-- [ ] Content types + validation test (all locales filled, unique slugs)
+- [ ] Folder structure per ARCHITECTURE.md: `features/`, route groups `(scene)` and `(pages)`, ESLint import-boundary rule
+- [ ] Content types + `@next/mdx` + validation test (all locales filled, MDX files present, unique slugs)
 - [ ] 404 page
 
 ## Phase 3 — Scene prototype (placeholder art)

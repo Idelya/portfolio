@@ -49,75 +49,109 @@ and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md)
 
 ## Directory structure (target)
 
+Code is organized **by feature**. `app/` only does routing; pages are thin and compose feature components.
+
 ```
 src/
   app/
     [locale]/
-      layout.tsx          # html lang, metadata, fonts, providers, nav menu
-      page.tsx            # home: the scene
-      about/
-      projects/           # list
-      projects/[slug]/    # project detail pages (SEO-friendly, shareable)
-      experience/
-      skills/
-      contact/            # form + Server Action
+      layout.tsx            # root for a locale: <html lang>, fonts, i18n provider, NavMenu, SkipLink
       not-found.tsx
-    sitemap.ts            # generated sitemap with hreflang alternates
+      (scene)/              # route group: home scene layout (full-screen, no footer)
+        page.tsx            # → features/scene
+      (pages)/              # route group: content subpages layout
+        layout.tsx          # themed header, "back to the scene", footer
+        about/page.tsx
+        projects/page.tsx
+        projects/[slug]/page.tsx
+        experience/page.tsx
+        skills/page.tsx
+        contact/page.tsx
+    sitemap.ts              # sitemap with hreflang alternates
     robots.ts
-    opengraph-image.tsx   # generated OG images (per locale / per project)
-    globals.css           # Tailwind import + design tokens
+    opengraph-image.tsx     # generated OG images
+    globals.css             # Tailwind import + design tokens (@theme)
+  features/
+    scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
+      Scene.tsx             # server component: static layered markup (final hub state)
+      SceneAnimator.tsx     # client island: scroll progress → layer transforms
+      layers/               # Sky, Mountains, Tree, Ground… (inline SVG components)
+      cat/                  # cat animation wrapper
+      objects/              # interactive objects (Mailbox…) and easter eggs
+      config.ts             # layer depths, aspect-ratio layouts, object positions, scroll keyframes
+      *.test.ts             # pure logic tests (keyframe math, layout selection)
+    projects/               # ProjectCard, ProjectList, ProjectDetail, getProjects.ts
+    experience/
+    skills/
+    about/
+    contact/
+      ContactForm.tsx       # client component
+      action.ts             # Server Action ("use server"): validate, send email
+      schema.ts             # shared validation schema (client + server)
   components/
-    ui/                   # generic, reusable primitives (Button, Link, Card, Icon)
-    sections/             # subpage building blocks (ProjectCard, ExperienceItem, ContactForm…)
-    layout/               # Header, NavMenu, Footer, LanguageSwitcher, SkipLink
-  scene/                  # everything for the home scene; imported only by app/[locale]/page.tsx
-    Scene.tsx             # server component: static layered markup (final hub state)
-    SceneAnimator.tsx     # client island: scroll progress → layer transforms
-    layers/               # Sky, Mountains, Tree, Ground… (placeholder SVGs first)
-    cat/                  # cat animation wrapper
-    objects/              # interactive objects (Mailbox…) and easter eggs
-    config.ts             # layer depths, object positions per breakpoint, scroll keyframes
+    ui/                     # generic primitives with no business logic (Button, Link, Card, Icon)
+    layout/                 # NavMenu, PageHeader, Footer, LanguageSwitcher, SkipLink
   content/
-    types.ts              # TypeScript types for all content (Project, Experience, Skill…)
-    projects.ts           # localized content data, see "Content layer" below
-    experience.ts
+    types.ts                # Project, Experience, Skill, Profile, Localized…
     profile.ts
+    projects.ts             # structured project data
+    projects/               # long project descriptions
+      <slug>.en.mdx
+      <slug>.pl.mdx
+    experience.ts
+    skills.ts
   i18n/
-    routing.ts            # locales, default locale
+    routing.ts              # locales, default locale
     request.ts
   messages/
-    en.json               # UI strings (buttons, labels, aria-labels)
+    en.json                 # UI strings (buttons, labels, aria-labels, scene object labels)
     pl.json
-  lib/                    # framework-agnostic helpers (seo, formatting, utils)
+  lib/                      # framework-agnostic helpers (seo.ts, formatDate.ts, env.ts)
 public/
-  scene/                  # scene art assets (same file names for placeholder and final art)
-  images/                 # optimized source images; use next/image
-  cv/                     # CV PDFs per locale
+  scene/                    # raster scene art (same file names for placeholder and final art)
+  images/                   # project screenshots, photo
+  cv/                       # approved CV PDFs per locale
 tests/
-  e2e/                    # Playwright specs
+  e2e/                      # Playwright specs (incl. scene viewport matrix)
 ```
 
+### Module boundaries
+
+| Module | May import from | Must not import from |
+|---|---|---|
+| `app/` | `features/`, `components/`, `content/`, `lib/`, `i18n/` | — |
+| `features/<x>/` | `components/`, `content/`, `lib/`, `i18n/` | other `features/` (share via `components/` or `lib/` instead) |
+| `components/` | `lib/`, `i18n/` | `features/`, `content/` (receive data via props) |
+| `content/` | `content/types.ts` only | anything with React or Next.js |
+| `lib/` | nothing app-specific | `features/`, `components/` |
+
 Rules:
-- `src/scene/**` is imported only by the home page; subpages must not pull in scene code or animation libraries.
-- `src/content/**` has no React imports; it is plain typed data so pages, scene labels and tests can use it.
-- Components are named exports, one component per file, file named like the component (`ProjectCard.tsx`).
+- `features/scene/**` is imported only by `app/[locale]/(scene)/page.tsx`. Animation libraries live only there,
+  so subpages never ship scene code.
+- No barrel files (`index.ts` re-exports); import from the file directly. Keeps tree-shaking and client/server boundaries obvious.
+- A component starts in its feature. Move it to `components/ui` only when a second feature needs it and it has no business logic.
+- Unit tests sit next to the code (`*.test.ts(x)`); end-to-end tests in `tests/e2e/`.
+- Scene art that must be animated or styled in parts (glow, sway) is an inline SVG component in
+  `features/scene/layers` or `objects`; large raster art goes to `public/scene/` via `next/image`.
 
 ## Content layer
 
 Two kinds of text:
 
 1. **UI strings** (labels, buttons, aria-labels, scene object labels): `src/messages/{en,pl}.json`, accessed via next-intl.
-2. **Portfolio content** (projects, experience, bio, skills): typed data in `src/content/`, with
-   localized fields:
+2. **Portfolio content**:
+   - **Structured data** (projects list, experience, skills, profile): TypeScript in `src/content/*.ts`, with localized fields.
+   - **Long-form text** (project case-study bodies, long bio): MDX, one file per locale
+     (`src/content/projects/<slug>.en.mdx`, `<slug>.pl.mdx`), rendered with `@next/mdx` at build time.
 
 ```ts
 type Localized<T = string> = { en: T; pl: T };
 
 interface Project {
-  slug: string;              // URL-safe, stable, English
+  slug: string;              // URL-safe, stable, English; also the MDX file name
   title: Localized;
   summary: Localized;        // 1–2 sentences, used in cards and meta descriptions
-  body?: Localized;          // longer description for the detail page
+  hasBody: boolean;          // true → <slug>.en.mdx and <slug>.pl.mdx must exist
   stack: string[];
   links: { live?: string; repo?: string };
   image?: { src: string; alt: Localized };
@@ -126,8 +160,9 @@ interface Project {
 }
 ```
 
-Missing translations must fail the build (validated by a test or a type), never silently fall back.
-If longer, rich content becomes necessary, switch project bodies to MDX and record it in [DECISIONS.md](DECISIONS.md).
+Missing translations must fail the build, never silently fall back: the `Localized` type enforces
+both locales in TS data, and a content test checks that every project with `hasBody` has both MDX files
+and that slugs are unique.
 
 ## i18n
 

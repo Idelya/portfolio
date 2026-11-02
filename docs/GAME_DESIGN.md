@@ -97,7 +97,7 @@ Approach:
   Pick the layout from `aspect-ratio` media queries (and `min-height` for very short landscape phones).
 - **Objects are rearranged per layout.** Each layout has its own object positions, sizes and order
   (e.g. landscape: one row along the ground; portrait: two or three tiers on the hillside). All of it
-  lives in data in `src/scene/config.ts`, not scattered across CSS.
+  lives in data in `src/features/scene/config.ts`, not scattered across CSS.
 - **Normalized scene coordinates.** Positions use a coordinate space relative to the stage
   (percentages or a fixed design grid scaled to the viewport), so art and objects scale together.
 - **Layers anchor and crop, never stretch.** Sky anchors top, ground anchors bottom; layers have bleed

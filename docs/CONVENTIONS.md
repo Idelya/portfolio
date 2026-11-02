@@ -23,7 +23,13 @@
 | Route segment | kebab-case | `projects/[slug]` |
 | Content slug | kebab-case, English | `weather-dashboard` |
 | i18n keys | nested, camelCase | `hero.ctaViewProjects` |
+| Feature folder | kebab-case, singular domain name | `features/contact/` |
+| Server Action file | `action.ts` (or `<verb>Action.ts` if several) inside the feature | `features/contact/action.ts` |
+| Validation schema | `schema.ts` inside the feature | `features/contact/schema.ts` |
+| Long-form content | `<slug>.<locale>.mdx` | `content/projects/weather-dashboard.pl.mdx` |
 | Test file | next to source, `.test.ts(x)`; e2e in `tests/e2e/*.spec.ts` | |
+
+Where code goes and what may import what: [ARCHITECTURE.md](ARCHITECTURE.md#directory-structure-target).
 
 ## Styling
 
@@ -73,5 +79,5 @@ anyone and indexed by secret scanners within minutes.
 ## Dependencies
 
 - Before adding a package: check it is maintained, tree-shakeable and not duplicating something already in the stack.
-- Animation packages (scroll, Rive/Lottie runtime, audio) may only be imported from `src/scene/**`.
+- Animation packages (scroll, Rive/Lottie runtime, audio) may only be imported from `src/features/scene/**`.
 - Pin exact versions for the animation runtime; regular `^` ranges elsewhere are fine.
