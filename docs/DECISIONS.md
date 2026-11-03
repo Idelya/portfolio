@@ -5,6 +5,21 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — Scene objects: five objects on three height levels; the cat is About
+
+- **Decision:** The opening frame shows only a branch reaching in from a side edge with the cat on it
+  (no full tree). The hub has five content objects: skill tree (Skills, high), cat on a boulder (About),
+  signpost on a hill (Experience, middle), mailbox on a post with a rising flag (Contact, middle),
+  treasure chest (Projects, low, foreground). The CV has no object of its own: its download is on the
+  Experience page and in the nav menu.
+- **Why:** Fewer objects fit a 360px portrait screen without overlaps. Different heights avoid a flat
+  row on the grass. The cat is what visitors follow during the jump, so it is the most natural thing to
+  click. "Skill tree" is a game reference tech visitors recognise. The owner rejected a cottage (About)
+  and a floating book (Skills).
+- **Consequences:** Clicking the cat always navigates, so petting the cat is not an easter egg. The
+  signpost and the mailbox need clearly different silhouettes. Details in
+  [GAME_DESIGN.md](GAME_DESIGN.md#interactive-objects-ground-hub).
+
 ### 2026-11-03 — Secret scanning: secretlint on pre-commit, gitleaks in CI
 
 - **Decision:** husky runs `scripts/secretlint-staged.sh` on pre-commit: it exports the staged files
@@ -43,7 +58,7 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ### 2026-11-03 — Scene first paint is the opening frame; animation waits for the first scroll
 
-- **Decision:** The server renders the `p = 0` frame (sky, tree, cat, `<h1>` title, down arrow) with the
+- **Decision:** The server renders the `p = 0` frame (sky, branch with the cat, `<h1>` title, down arrow) with the
   hub below it in normal flow. The scroll sequence starts only on the visitor's first scroll. The `<h1>`
   fades with `opacity`/`transform` only and is never removed or hidden from the accessibility tree.
 - **Why:** Server HTML and the hydrated client then show the same first screen: no flash, no CLS, and the

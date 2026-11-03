@@ -7,7 +7,7 @@ Entry point for AI agents working on this repo. Read this first, then the doc re
 Personal portfolio of **Anna Papros-Matejuk**, software developer. It is a representative,
 public-facing product: it must be polished, bug-free, fast, accessible and work on every device.
 The home page is an **illustrated, scroll-driven 2D scene** (sky, mountains, a cat jumping from a
-tree) where clicking objects in the world leads to **static content subpages** (About, Projects,
+branch) where clicking objects in the world leads to **static content subpages** (About, Projects,
 Contact…). A persistent navigation menu gives recruiters a direct path. See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md).
 
 ## Language rules

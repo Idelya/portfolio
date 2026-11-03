@@ -8,7 +8,7 @@
 
 The home page is an illustrated, **scroll-driven scene**: a fairy-tale, magical, hand-drawn 2D world.
 The visitor does not control a character. Scrolling moves the "camera" down from the sky to the
-ground, and a cat jumps down from a tree along the way. At the bottom, the visitor explores by
+ground, and a cat jumps down from a branch along the way. At the bottom, the visitor explores by
 **clicking objects in the world**. Most objects lead to static content subpages (the portfolio
 information); some are just playful easter eggs.
 
@@ -27,12 +27,12 @@ The game feeling comes from discovery, motion and reactive objects, not from con
 The scene is a sticky, full-viewport stage. Scroll progress `p` (0 → 1) over roughly **3 viewport
 heights (proposal)** drives all animation. After `p = 1` the page stops scrolling: the ground hub is the end.
 
-| Progress        | Camera / background                                                                                                    | Cat                                                                         | Foreground                                                                     | UI                                                                          |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| **0** (landing) | Sky and mountain range, camera high up                                                                                 | Sits on a tree branch in the foreground, idle animation (tail swish, blink) | Tree                                                                           | Site title ("Anna Papros-Matejuk — Portfolio") and a pulsing **down arrow** |
-| **0 → 0.6**     | Camera descends smoothly. Parallax: far mountains move slowest, nearer layers faster, giving a real perspective change | Jumps from the tree (anticipation → leap → fall)                            | Tree slides up and out; ground layers rise into view                           | Title and arrow fade out                                                    |
-| **0.6 → 1**     | Settles on the ground level                                                                                            | Lands (squash, small dust puff), then idles on the ground                   | Interactive objects appear; they **glow or move** to signal they are clickable | Navigation stays available                                                  |
-| **1** (hub)     | Static ground scene, ambient animation only                                                                            | Idle; may look towards the hovered object **(proposal)**                    | All objects interactive                                                        |                                                                             |
+| Progress        | Camera / background                                                                                                    | Cat                                                                                                              | Foreground                                                                     | UI                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **0** (landing) | Sky and mountain range, camera high up                                                                                 | Sits on a branch that reaches into the frame from a side edge (no full tree), idle animation (tail swish, blink) | Branch                                                                         | Site title ("Anna Papros-Matejuk — Portfolio") and a pulsing **down arrow** |
+| **0 → 0.6**     | Camera descends smoothly. Parallax: far mountains move slowest, nearer layers faster, giving a real perspective change | Jumps from the branch (anticipation → leap → fall)                                                               | Branch slides up and out; ground layers rise into view                         | Title and arrow fade out                                                    |
+| **0.6 → 1**     | Settles on the ground level                                                                                            | Lands on its boulder (squash, small dust puff), then idles there                                                 | Interactive objects appear; they **glow or move** to signal they are clickable | Navigation stays available                                                  |
+| **1** (hub)     | Static ground scene, ambient animation only                                                                            | Idle on the boulder; is itself a link (About); may look towards the hovered object **(proposal)**                | All objects interactive                                                        |                                                                             |
 
 Rules:
 
@@ -58,15 +58,29 @@ The title is the page's only `<h1>` and must count for SEO without spoiling the 
 
 Each object is a real link or button in the DOM (not a canvas hit area), with an accessible label.
 
-| Object      | Leads to                                                       | Type       |
-| ----------- | -------------------------------------------------------------- | ---------- |
-| **Mailbox** | `/[locale]/contact`: contact page with a form to send an email | Content    |
-| TBD         | About me                                                       | Content    |
-| TBD         | Projects (list → project detail pages)                         | Content    |
-| TBD         | Experience                                                     | Content    |
-| TBD         | Skills                                                         | Content    |
-| TBD         | CV download                                                    | Content    |
-| TBD         | e.g. a firefly swarm, a sleeping owl, a magic flower           | Easter egg |
+Five content objects, agreed with the owner (2026-11-03). They sit on **three height levels** so the
+hub is not a flat row on the grass: one high, three middle, one low (a triangle that leads the eye from
+the tree crown through the cat down to the chest).
+
+| Level  | Object                                                                                     | Leads to                               | Hover / click reaction                       |
+| ------ | ------------------------------------------------------------------------------------------ | -------------------------------------- | -------------------------------------------- |
+| High   | **Skill tree**: a separate magical tree (not the opening-frame branch) with glowing fruits | Skills                                 | Fruits flare up, leaves rustle               |
+| Middle | **Cat** sitting on a boulder                                                               | About                                  | Squints / purrs on hover; stretches on click |
+| Middle | **Signpost** on a hill, left side                                                          | Experience, including the CV download  | Arrows swing round                           |
+| Middle | **Mailbox on a post**, right side, lower than the signpost                                 | `/[locale]/contact`: contact form      | Flag goes up                                 |
+| Low    | **Treasure chest** in the foreground                                                       | Projects (list → project detail pages) | Lid opens, sparkles                          |
+| —      | TBD, e.g. a firefly swarm, a sleeping owl, a magic flower                                  | Easter egg                             |                                              |
+
+Object rules:
+
+- **No separate CV object.** The CV download lives on the Experience page; the nav menu keeps a CV item.
+- **The cat is a link to About.** It becomes clickable once it has landed (hub); in the DOM the link exists
+  from the start at its hub position, so no-JS visitors and screen readers get it. Clicking the cat always
+  navigates, so "petting the cat" is not an easter egg. It gets the same glow and label as other objects
+  so it does not read as decoration.
+- **Signpost and mailbox must not look alike** (both are a post with something on top): opposite sides of
+  the scene, different heights, different tops (horizontal arrows vs. a rounded box with a red flag).
+- High objects keep clear of the nav menu (safe zone at the top) and stay visible without scrolling on every layout.
 
 Interactivity signals:
 
@@ -79,7 +93,7 @@ Easter eggs play an animation or sound in place and do not navigate.
 
 ## Subpages
 
-- Static, content-first pages (About, Projects, Project detail, Experience, Skills, Contact).
+- Static, content-first pages (About, Projects, Project detail, Experience with the CV download, Skills, Contact).
 - Server-rendered, fast, readable, fully indexable. This is where the SEO content lives.
 - Themed header/background in the scene style, plain readable body.
 - Clear way back to the scene (back to hub) plus the global navigation.
@@ -113,7 +127,7 @@ Approach:
   e.g. tall portrait (≤ 9:16), portrait (≈ 3:4), landscape (≈ 16:10 / 16:9) and ultra-wide (≥ 21:9).
   Pick the layout from `aspect-ratio` media queries (and `min-height` for very short landscape phones).
 - **Objects are rearranged per layout.** Each layout has its own object positions, sizes and order
-  (e.g. landscape: one row along the ground; portrait: two or three tiers on the hillside). All of it
+  (e.g. landscape: the three height levels spread across the width; portrait: the levels stacked as tiers on the hillside). All of it
   lives in data in `src/features/scene/config.ts`, not scattered across CSS.
 - **Normalized scene coordinates.** Positions use a coordinate space relative to the stage
   (percentages or a fixed design grid scaled to the viewport), so art and objects scale together.
@@ -128,15 +142,15 @@ Approach:
 ## Placeholder art
 
 Until final illustrations exist, build with simple SVG shapes in the final palette: gradient sky,
-layered mountain silhouettes, a tree shape, a cat silhouette, simple object shapes. Placeholder layers
+layered mountain silhouettes, a branch, a cat silhouette, simple object shapes (skill tree, boulder, signpost, mailbox, chest). Placeholder layers
 use the same dimensions, anchors and file names as the final art, so swapping assets requires no code changes.
 
 ## Asset specification (for whoever draws the final art)
 
-- Separate layers per depth: sky, far mountains, mid mountains, near hills, tree, ground, each object, cat.
+- Separate layers per depth: sky, far mountains, mid mountains, near hills, branch, ground, each object, cat.
 - Vector (SVG) where the style allows; otherwise PNG/WebP at 2× the largest display size, transparent background.
 - Each layer wider/taller than the viewport, with bleed for parallax movement and portrait cropping.
-- Cat animation delivered as a rigged animation (Rive or Lottie) or a sprite sheet: idle-on-branch, jump, fall, land, idle-on-ground.
+- Cat animation delivered as a rigged animation (Rive or Lottie) or a sprite sheet: idle-on-branch, jump, fall, land, idle-on-boulder, hover and click reactions.
 - Interactive objects: base state plus glow/highlight state (or glow done in code).
 
 ## Technology (open decision)
@@ -153,11 +167,12 @@ Record the choice in [DECISIONS.md](DECISIONS.md).
 
 ## Open questions (owner to answer)
 
-1. Which objects stand for About, Projects, Experience, Skills, CV? Any ideas for easter eggs?
+1. Easter eggs: which ones, if any, for v1?
 2. Is the cat a specific cat (your own? a name?) or a generic mascot? Does it show speech-bubble hints?
    (A chatting AI cat is in the [backlog](BACKLOG.md), not v1.)
 3. Sound: ambient music / effects? If yes, muted by default with a toggle.
 4. Exact title text and whether a subtitle (job title) sits under it on the first screen.
 
-Resolved: phone composition → objects are rearranged per layout (see [Responsive composition](#responsive-composition)).
+Resolved: hub objects → see [Interactive objects](#interactive-objects-ground-hub).
+Phone composition → objects are rearranged per layout (see [Responsive composition](#responsive-composition)).
 Time-of-day variants → [backlog](BACKLOG.md).

@@ -56,7 +56,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] Experience
 - [ ] Skills
 - [ ] Contact page with form (Server Action, email service, validation, spam protection)
-- [ ] CV download
+- [ ] CV download (button on the Experience page + nav menu item)
 - [ ] Shared themed page header + "back to the scene"
 - [ ] Real content from owner (see CONTENT.md)
 - [ ] Lighthouse ≥ 95 on mobile, axe clean, cross-browser + device check

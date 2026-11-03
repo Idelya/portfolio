@@ -30,7 +30,7 @@ and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md)
   /                    proxy.ts (next-intl): redirect to /en or /pl by Accept-Language
 
   /[locale]            Home scene (SSG)
-  ├─ server-rendered:  opening frame (sky, mountains, tree, cat on branch, <h1> title, down arrow),
+  ├─ server-rendered:  opening frame (sky, mountains, branch with the cat, <h1> title, down arrow),
   │                    nav menu, and below it the hub with objects as real <a> links
   └─ client island:    scroll-driven parallax + cat animation + object hover/glow effects
                        (idle until the first scroll; without JS the static page with working links remains)
@@ -55,7 +55,7 @@ and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md)
 - Animation libraries and the cat animation runtime load only on the home page, never on subpages. They
   start loading after the LCP (on idle), at the latest on the first scroll, and never delay the first paint.
 - Images in the scene: SVG inline or `next/image` with explicit dimensions, so there is no layout shift.
-- The first screen (sky, mountains, tree, cat, title) is the LCP: keep those layers small and preloaded;
+- The first screen (sky, mountains, branch, cat, title) is the LCP: keep those layers small and preloaded;
   lower layers and objects can load lazily.
 
 ## Directory structure (target)
@@ -87,9 +87,9 @@ src/
     scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
       Scene.tsx             # server component: opening frame + hub below (static, linkable)
       SceneAnimator.tsx     # client island: scroll progress → layer transforms
-      layers/               # Sky, Mountains, Tree, Ground… (inline SVG components)
+      layers/               # Sky, Mountains, Branch, Ground… (inline SVG components)
       cat/                  # cat animation wrapper
-      objects/              # interactive objects (Mailbox…) and easter eggs
+      objects/              # interactive objects (Mailbox, SkillTree…) and easter eggs
       config.ts             # layer depths, aspect-ratio layouts, object positions, scroll keyframes
       *.test.ts             # pure logic tests (keyframe math, layout selection)
     projects/               # ProjectCard, ProjectList, ProjectDetail, getProjects.ts

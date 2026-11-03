@@ -24,7 +24,7 @@ Design every feature by asking: _does this help or hinder the recruiter on a pho
 ## Structure: scene + subpages
 
 - **Home scene**: an illustrated, fairy-tale 2D scene driven by scroll (sky → mountains → ground,
-  a cat jumps from a tree). At the bottom, clickable objects lead to subpages or trigger easter eggs.
+  a cat jumps from a branch). At the bottom, clickable objects lead to subpages or trigger easter eggs.
   Details in [GAME_DESIGN.md](GAME_DESIGN.md).
 - **Subpages**: static, fast, readable pages with the actual portfolio content (About, Projects,
   Experience, Skills, Contact with a form). This is what search engines index.
