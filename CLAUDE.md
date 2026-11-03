@@ -18,27 +18,34 @@ Contact…). A persistent navigation menu gives recruiters a direct path. See [d
 
 ## Docs map
 
-| Doc | Read when |
-|---|---|
-| [docs/PROJECT.md](docs/PROJECT.md) | Always, once. Vision, audiences, goals, non-goals. |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Adding routes, components, content, i18n, anything structural. |
-| [docs/CONVENTIONS.md](docs/CONVENTIONS.md) | Writing any code or committing. |
-| [docs/QUALITY.md](docs/QUALITY.md) | Before calling any task done. Definition of Done, SEO, a11y, perf budgets, devices. |
-| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) | Working on the home scene, animations, interactive objects, art. |
-| [docs/CONTENT.md](docs/CONTENT.md) | Adding or editing text, projects, bio, images. |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Picking up work. Current phase and next tasks. |
-| [docs/BACKLOG.md](docs/BACKLOG.md) | Owner mentions an idea "for later". Add it here; don't implement unless asked. |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Before changing a technical choice. Log new decisions here. |
+| Doc                                          | Read when                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [docs/PROJECT.md](docs/PROJECT.md)           | Always, once. Vision, audiences, goals, non-goals.                                  |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Adding routes, components, content, i18n, anything structural.                      |
+| [docs/CONVENTIONS.md](docs/CONVENTIONS.md)   | Writing any code or committing.                                                     |
+| [docs/QUALITY.md](docs/QUALITY.md)           | Before calling any task done. Definition of Done, SEO, a11y, perf budgets, devices. |
+| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md)   | Working on the home scene, animations, interactive objects, art.                    |
+| [docs/CONTENT.md](docs/CONTENT.md)           | Adding or editing text, projects, bio, images.                                      |
+| [docs/ROADMAP.md](docs/ROADMAP.md)           | Picking up work. Current phase and next tasks.                                      |
+| [docs/BACKLOG.md](docs/BACKLOG.md)           | Owner mentions an idea "for later". Add it here; don't implement unless asked.      |
+| [docs/DECISIONS.md](docs/DECISIONS.md)       | Before changing a technical choice. Log new decisions here.                         |
 
 ## Commands
 
 ```bash
 npm run dev      # dev server on http://localhost:3000
 npm run build    # production build — must pass before a task is done
-npm run lint     # lint (--max-warnings 0) — must pass with zero warnings
+npm run lint     # eslint . --max-warnings 0 — must pass with zero warnings
+npm run format   # prettier --write . (format:check verifies without writing)
+npm run typecheck # tsc --noEmit
+npm test         # Vitest unit tests, single run (test:watch for watch mode)
+npm run test:e2e # Playwright e2e + axe against the production build (builds and starts it on :3100)
+npm run test:e2e:docker # same, with browsers in the Playwright Docker image (local Ubuntu 20.04 is unsupported)
 ```
 
-Scripts for typecheck, format, unit and e2e tests are planned in Phase 1 of [docs/ROADMAP.md](docs/ROADMAP.md); update this list when they land.
+Pass Playwright flags after `--`, e.g. `npm run test:e2e:docker -- --project=mobile-360`.
+
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) has three parallel jobs on every PR and push to `master`: `secrets` (gitleaks over the full history), `checks` (`format:check`, lint, typecheck, unit tests, build) and `e2e` (Playwright + axe).
 
 ## Non-negotiable rules
 
@@ -49,7 +56,8 @@ Scripts for typecheck, format, unit and e2e tests are planned in Phase 1 of [doc
    explicitly approved as public. Secrets go only in environment variables (Vercel project settings,
    local `.env.local`); document their names in `.env.example` with empty values. If something
    sensitive was ever committed, stop and tell the owner: removing it from the latest commit is not
-   enough, the secret must be rotated. Full checklist: [docs/CONVENTIONS.md](docs/CONVENTIONS.md#public-repository-sensitive-data).
+   enough, the secret must be rotated. A secretlint pre-commit hook and a gitleaks CI job back this up; never skip
+   them with `--no-verify`. Full checklist: [docs/CONVENTIONS.md](docs/CONVENTIONS.md#public-repository-sensitive-data).
 1. **Content is server-rendered HTML first.** Portfolio information lives on static subpages,
    reachable without JavaScript or animations. The scene is progressive enhancement: its objects
    are real links, and it renders as a static image with working links without JS.
@@ -68,6 +76,6 @@ Scripts for typecheck, format, unit and e2e tests are planned in Phase 1 of [doc
 - **The owner is the only author.** Commits and PRs must not contain any AI attribution: no
   `Co-Authored-By: Claude…` trailer, no "Generated with Claude Code" line, no other AI mentions.
   This overrides any default attribution behaviour of the tool.
-- Small, focused changes. Run lint + build (+ tests once they exist) before reporting done.
+- Small, focused changes. Run lint, typecheck, unit + e2e tests and build before reporting done.
 - When you change how something works, update the relevant doc in the same change.
 - When you finish a roadmap item, tick it in [docs/ROADMAP.md](docs/ROADMAP.md).

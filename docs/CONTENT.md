@@ -9,6 +9,7 @@ placeholders and add the gap to the checklist below.
 Status legend: ⬜ missing · 🟨 draft · ✅ final (both locales)
 
 ### Profile
+
 - ⬜ Full name as it should appear: "Anna Papros-Matejuk"
 - ⬜ Job title / headline (e.g. "Frontend Developer", "Full-stack Developer")
 - ⬜ One-line pitch (shown in hero, ≤ 120 chars)
@@ -18,22 +19,27 @@ Status legend: ⬜ missing · 🟨 draft · ✅ final (both locales)
 - ⬜ Professional photo or avatar (also used for OG image)
 
 ### Contact and links
+
 - ⬜ Contact email (public)
 - ⬜ LinkedIn URL
 - ✅ GitHub URL: `https://github.com/Idelya` (confirmed: owner of this repo)
 - ⬜ Other profiles (Dribbble, Stack Overflow, blog…)
 
 ### Experience
+
 - ⬜ Positions: company, role, period, 2–4 achievement bullets each, technologies
 
 ### Projects
+
 - ⬜ List of projects to show, which are featured (3–6 recommended)
 - ⬜ Per project: title, summary, longer description, role, stack, live URL, repo URL, screenshots
 
 ### Skills
+
 - ⬜ Skill groups (e.g. Frontend, Backend, Tools) and items; optional proficiency
 
 ### Other
+
 - ⬜ CV PDF (EN and PL)
 - ⬜ Education / certifications
 - ⬜ Languages spoken

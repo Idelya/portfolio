@@ -1,0 +1,2 @@
+# Block commits that contain secrets: the repository is public (CLAUDE.md rule 0).
+scripts/secretlint-staged.sh

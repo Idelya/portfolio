@@ -18,28 +18,28 @@ This site represents its owner professionally. These standards are the Definitio
 
 ## Supported devices and browsers
 
-| Category | Targets |
-|---|---|
-| Mobile | iOS Safari (last 2 major), Chrome Android (last 2 major) |
-| Desktop | Chrome, Edge, Firefox, Safari (last 2 major) |
-| Viewports | 360px to 2560px wide; portrait and landscape |
-| Input | Mouse, touch (incl. touch scroll momentum), keyboard |
-| Low-end | All pages fully usable on low-end Android and slow 4G |
+| Category  | Targets                                                  |
+| --------- | -------------------------------------------------------- |
+| Mobile    | iOS Safari (last 2 major), Chrome Android (last 2 major) |
+| Desktop   | Chrome, Edge, Firefox, Safari (last 2 major)             |
+| Viewports | 360px to 2560px wide; portrait and landscape             |
+| Input     | Mouse, touch (incl. touch scroll momentum), keyboard     |
+| Low-end   | All pages fully usable on low-end Android and slow 4G    |
 
 On weak devices (`saveData`, low memory) the scene may drop to the static composition (same as reduced motion), with no error.
 Scroll animation must stay at 60 fps on a mid-range phone: animate only `transform` and `opacity`.
 
 ## Performance budgets (mobile, Lighthouse)
 
-| Metric | Budget |
-|---|---|
-| Lighthouse Performance / Accessibility / Best Practices / SEO | ≥ 95 each |
-| LCP | < 2.0 s |
-| CLS | < 0.05 |
-| INP | < 200 ms |
-| Initial JS (gzipped, subpages) | < 100 KB |
-| Initial JS (gzipped, home incl. animation runtime) | < 180 KB |
-| Scene art above the fold | < 300 KB total; lower layers lazy-loaded |
+| Metric                                                        | Budget                                   |
+| ------------------------------------------------------------- | ---------------------------------------- |
+| Lighthouse Performance / Accessibility / Best Practices / SEO | ≥ 95 each                                |
+| LCP                                                           | < 2.0 s                                  |
+| CLS                                                           | < 0.05                                   |
+| INP                                                           | < 200 ms                                 |
+| Initial JS (gzipped, subpages)                                | < 100 KB                                 |
+| Initial JS (gzipped, home incl. animation runtime)            | < 180 KB                                 |
+| Scene art above the fold                                      | < 300 KB total; lower layers lazy-loaded |
 
 ## SEO
 
@@ -57,6 +57,7 @@ Scroll animation must stay at 60 fps on a mid-range phone: animate only `transfo
 ## Accessibility
 
 Target **WCAG 2.2 AA**.
+
 - Skip link to main content as the first focusable element.
 - Color contrast AA.
 - Scene: every interactive object is a focusable link/button with a label, decorative layers are
@@ -66,10 +67,15 @@ Target **WCAG 2.2 AA**.
 
 ## Testing strategy
 
-| Layer | Tool | What |
-|---|---|---|
-| Unit | Vitest | Content validation (all fields translated, slugs unique), utils, hooks, scroll keyframe math (pure functions). |
-| E2E | Playwright | Navigation, language switch, scene objects link to subpages, scene with JS disabled and with reduced motion (all links reachable, `<h1>` present), `/` locale redirect, contact links, 404; on Chromium, WebKit, Firefox and mobile emulation. |
-| A11y | `@axe-core/playwright` | Axe scan on every page in both locales, zero violations. |
-| Performance / SEO | Lighthouse CI | Budgets above, run on PR previews. |
-| Visual | Playwright screenshots (optional) | Key pages at 360 / 1280 px. |
+| Layer             | Tool                              | What                                                                                                                                                                                                                                           |
+| ----------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit              | Vitest + Testing Library (jsdom)  | Content validation (all fields translated, slugs unique), utils, hooks, scroll keyframe math (pure functions).                                                                                                                                 |
+| E2E               | Playwright                        | Navigation, language switch, scene objects link to subpages, scene with JS disabled and with reduced motion (all links reachable, `<h1>` present), `/` locale redirect, contact links, 404; on Chromium, WebKit, Firefox and mobile emulation. |
+| A11y              | `@axe-core/playwright`            | Axe scan on every page in both locales, zero violations.                                                                                                                                                                                       |
+| Performance / SEO | Lighthouse CI                     | Budgets above, run on PR previews.                                                                                                                                                                                                             |
+| Visual            | Playwright screenshots (optional) | Key pages at 360 / 1280 px.                                                                                                                                                                                                                    |
+
+Playwright projects (`playwright.config.ts`): `desktop-chromium`, `desktop-firefox`, `desktop-webkit`,
+`mobile-chrome` (Pixel 7), `mobile-safari` (iPhone 15) and `mobile-360` (360 px wide, touch).
+Accessibility specs use the `makeAxeBuilder` fixture from `tests/e2e/fixtures.ts`, which scans for
+WCAG 2.0–2.2 A/AA rules; expect `violations` to equal `[]`.

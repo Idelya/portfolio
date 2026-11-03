@@ -11,28 +11,29 @@
   headings in order), ARIA only when semantics are not enough.
 - Animations: CSS first. JS animation only when needed. Always provide a `prefers-reduced-motion` fallback.
 - No dead code, no commented-out code, no `console.log` in committed code.
-- Comments explain *why*, not *what*.
+- Comments explain _why_, not _what_.
 
 ## Naming
 
-| Thing | Convention | Example |
-|---|---|---|
-| Component file | PascalCase | `ProjectCard.tsx` |
-| Hook | camelCase, `use` prefix | `useReducedMotion.ts` |
-| Utility / lib file | camelCase | `formatPeriod.ts` |
-| Route segment | kebab-case | `projects/[slug]` |
-| Content slug | kebab-case, English | `weather-dashboard` |
-| i18n keys | nested, camelCase | `hero.ctaViewProjects` |
-| Feature folder | kebab-case, same name as its route or domain | `features/contact/`, `features/projects/` |
-| Server Action file | `action.ts` (or `<verb>Action.ts` if several) inside the feature | `features/contact/action.ts` |
-| Validation schema | `schema.ts` inside the feature | `features/contact/schema.ts` |
-| Long-form content | `<slug>.<locale>.mdx` | `content/projects/weather-dashboard.pl.mdx` |
-| Test file | next to source, `.test.ts(x)`; e2e in `tests/e2e/*.spec.ts` | |
+| Thing              | Convention                                                       | Example                                     |
+| ------------------ | ---------------------------------------------------------------- | ------------------------------------------- |
+| Component file     | PascalCase                                                       | `ProjectCard.tsx`                           |
+| Hook               | camelCase, `use` prefix                                          | `useReducedMotion.ts`                       |
+| Utility / lib file | camelCase                                                        | `formatPeriod.ts`                           |
+| Route segment      | kebab-case                                                       | `projects/[slug]`                           |
+| Content slug       | kebab-case, English                                              | `weather-dashboard`                         |
+| i18n keys          | nested, camelCase                                                | `hero.ctaViewProjects`                      |
+| Feature folder     | kebab-case, same name as its route or domain                     | `features/contact/`, `features/projects/`   |
+| Server Action file | `action.ts` (or `<verb>Action.ts` if several) inside the feature | `features/contact/action.ts`                |
+| Validation schema  | `schema.ts` inside the feature                                   | `features/contact/schema.ts`                |
+| Long-form content  | `<slug>.<locale>.mdx`                                            | `content/projects/weather-dashboard.pl.mdx` |
+| Test file          | next to source, `.test.ts(x)`; e2e in `tests/e2e/*.spec.ts`      |                                             |
 
 Where code goes and what may import what: [ARCHITECTURE.md](ARCHITECTURE.md#directory-structure-target).
 
 ## Styling
 
+- Formatting is Prettier's job (`npm run format`); class order is sorted automatically, don't hand-sort.
 - Tailwind utility classes in JSX. Extract a component, not a CSS class, when a pattern repeats.
 - Design tokens (colors, fonts, spacing scale, radii) defined once in `globals.css` via `@theme`.
   No raw hex values in components.
@@ -56,6 +57,7 @@ Where code goes and what may import what: [ARCHITECTURE.md](ARCHITECTURE.md#dire
 anyone and indexed by secret scanners within minutes.
 
 **Pre-commit checklist (mandatory, every commit):**
+
 - [ ] Read the full staged diff: `git diff --cached`. Check `git status` for unexpected new files.
 - [ ] No secrets: API keys, tokens, passwords, private keys, connection strings, webhook URLs.
       Quick scan: `git diff --cached | grep -inE "key|secret|token|password|passwd|bearer|BEGIN .*PRIVATE"`.
@@ -69,12 +71,22 @@ anyone and indexed by secret scanners within minutes.
 - [ ] No local artifacts: logs, dumps, `.vercel/`, editor or OS files, personal Claude settings.
 
 **Rules:**
+
 - Secrets live only in environment variables: Vercel project settings for deploys, `.env.local` locally.
 - Only `NEXT_PUBLIC_*` variables reach the browser; never put a secret in one.
 - If a secret is committed (even if not pushed yet): stop, tell the owner, and **rotate the secret**.
   Rewriting history alone is not enough once pushed.
-- Planned safeguards (Phase 1): enable GitHub secret scanning + push protection, and add a pre-commit
-  secret scan (e.g. gitleaks) to hooks and CI.
+- Automated safeguards (they back up the checklist, they don't replace it):
+  - **Pre-commit hook** (husky, installed by `npm install`, nothing else needed):
+    `scripts/secretlint-staged.sh` scans the staged version of each changed file with secretlint and
+    blocks the commit on a finding. Never bypass it with `--no-verify`.
+  - **CI** (`secrets` job): gitleaks over the full history of all branches on every PR and push
+    (a second, broader rule set).
+  - **Confirmed false positive** (tell the owner first): the two tools need separate markers. For
+    secretlint, a `secretlint-disable-line` comment on the line. For gitleaks, a `gitleaks:allow`
+    comment on the line, or, where comments are impossible (JSON, lockfiles) or the finding is already
+    in history, its fingerprint from the CI log in `.gitleaksignore`, with a comment explaining why.
+  - **GitHub** secret scanning + push protection (repository settings, enabled by the owner).
 
 ## Dependencies
 
