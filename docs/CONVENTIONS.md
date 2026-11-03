@@ -76,8 +76,13 @@ anyone and indexed by secret scanners within minutes.
 - Only `NEXT_PUBLIC_*` variables reach the browser; never put a secret in one.
 - If a secret is committed (even if not pushed yet): stop, tell the owner, and **rotate the secret**.
   Rewriting history alone is not enough once pushed.
-- Planned safeguards (Phase 1): enable GitHub secret scanning + push protection, and add a pre-commit
-  secret scan (e.g. gitleaks) to hooks and CI.
+- Automated safeguards (they back up the checklist, they don't replace it):
+  - **Pre-commit hook** (husky, installed by `npm install`): `scripts/gitleaks.sh` scans the staged
+    changes and blocks the commit on a finding. It uses a local `gitleaks` binary or, if missing, the
+    pinned Docker image. Never bypass it with `--no-verify`; if it flags a false positive, add the
+    fingerprint to `.gitleaksignore` with a comment and tell the owner.
+  - **CI** (`secrets` job): gitleaks over the full history of all branches on every PR and push.
+  - **GitHub** secret scanning + push protection (repository settings, enabled by the owner).
 
 ## Dependencies
 

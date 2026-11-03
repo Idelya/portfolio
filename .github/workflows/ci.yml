@@ -14,6 +14,17 @@ permissions:
   contents: read
 
 jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: a secret removed in a later commit is still public.
+          fetch-depth: 0
+      - run: scripts/gitleaks.sh git --redact --no-banner --log-opts="--all"
+
   checks:
     name: Lint, typecheck, unit tests, build
     runs-on: ubuntu-latest

@@ -5,6 +5,16 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — Secret scanning with gitleaks via husky and CI
+
+- **Decision:** husky runs `scripts/gitleaks.sh` on pre-commit (staged changes); CI runs it over the
+  full history of all branches. The script prefers a local `gitleaks` binary and falls back to the
+  pinned Docker image `ghcr.io/gitleaks/gitleaks` (version set in the script).
+- **Why:** The repo is public; a hook catches a leak before it exists in history, CI catches commits made
+  without the hook. Docker avoids a separate install and keeps one gitleaks version everywhere.
+  Not `gitleaks-action`, to avoid a third-party action and its licence terms.
+- **Consequences:** Committing needs gitleaks or a running Docker daemon. Bump the version in one place.
+
 ### 2026-11-03 — Local e2e browsers run in the Playwright Docker image
 
 - **Decision:** `npm run test:e2e:docker` runs the test runner on the host and the browsers in
