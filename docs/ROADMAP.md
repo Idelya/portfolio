@@ -11,7 +11,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Replace boilerplate `README.md`
 
 ## Phase 1 — Stack upgrade and tooling
-- [ ] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
+- [x] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
       `next lint` is removed in Next 16: change the `lint` script to `eslint . --max-warnings 0` and update CLAUDE.md
 - [ ] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
 - [ ] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)

@@ -5,6 +5,13 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — TypeScript 6.0 and ESLint 9, not the newest majors
+- **Decision:** Use TypeScript `~6.0` and ESLint `^9` with `eslint-config-next` 16 (flat config).
+- **Why:** `typescript-eslint` (used by `eslint-config-next`) supports TypeScript `<6.1` only, and
+  `eslint-plugin-react` does not support ESLint 10 yet. TypeScript 7 and ESLint 10 would break linting.
+- **Consequences:** Revisit when `typescript-eslint` supports TS 7 and `eslint-config-next` supports ESLint 10.
+  `tsconfig.json` uses `target: ES2017` (`es5` is deprecated in TS 6).
+
 ### 2026-11-03 — Scene first paint is the opening frame; animation waits for the first scroll
 - **Decision:** The server renders the `p = 0` frame (sky, tree, cat, `<h1>` title, down arrow) with the
   hub below it in normal flow. The scroll sequence starts only on the visitor's first scroll. The `<h1>`

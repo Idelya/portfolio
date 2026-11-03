@@ -10,14 +10,14 @@
 |---|---|---|
 | Framework | **Next.js 16** (App Router) | Static generation by default. |
 | UI | **React 19** | Server Components by default, `"use client"` only where needed. |
-| Language | **TypeScript**, `strict: true` | No `any` without a comment explaining why. |
+| Language | **TypeScript 6.0**, `strict: true` | No `any` without a comment explaining why. Capped below 6.1 by `typescript-eslint`, see [DECISIONS.md](DECISIONS.md). |
 | Styling | **Tailwind CSS 4** | Design tokens in CSS (`@theme`), no inline style objects for static styling. |
 | i18n | **next-intl** | PL + EN, locale-prefixed routes. |
 | Scene animation | **TBD** (see [GAME_DESIGN.md](GAME_DESIGN.md#technology-open-decision)) | DOM/SVG layers. Scroll: CSS scroll-driven animations, Motion or GSAP. Cat: Rive, Lottie or sprite sheet. |
 | Contact form | Server Action + email service (**TBD**, e.g. Resend) | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit). |
 | Unit tests | **Vitest** + Testing Library | Logic, hooks, content validation. |
 | E2E tests | **Playwright** | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md). |
-| Lint / format | ESLint (next config) + Prettier | |
+| Lint / format | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + Prettier | Run directly with `eslint`; `next lint` no longer exists. |
 | Hosting | **Vercel** | Preview deploy per PR, production from `master`. |
 | Runtime | Node.js 20 LTS or newer | |
 
