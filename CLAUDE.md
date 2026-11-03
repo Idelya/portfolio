@@ -35,7 +35,7 @@ Contact…). A persistent navigation menu gives recruiters a direct path. See [d
 ```bash
 npm run dev      # dev server on http://localhost:3000
 npm run build    # production build — must pass before a task is done
-npm run lint     # lint — must pass with zero warnings
+npm run lint     # lint (--max-warnings 0) — must pass with zero warnings
 ```
 
 Scripts for typecheck, format, unit and e2e tests are planned in Phase 1 of [docs/ROADMAP.md](docs/ROADMAP.md); update this list when they land.

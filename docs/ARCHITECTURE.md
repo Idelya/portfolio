@@ -27,22 +27,33 @@ and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md)
 ## Rendering strategy
 
 ```
+  /                    proxy.ts (next-intl): redirect to /en or /pl by Accept-Language
+
   /[locale]            Home scene (SSG)
-  ├─ server-rendered:  <h1> title, nav menu, layered scene art, objects as real <a> links
+  ├─ server-rendered:  opening frame (sky, mountains, tree, cat on branch, <h1> title, down arrow),
+  │                    nav menu, and below it the hub with objects as real <a> links
   └─ client island:    scroll-driven parallax + cat animation + object hover/glow effects
-                       (hydrates on top; without JS the static hub with working links remains)
+                       (idle until the first scroll; without JS the static page with working links remains)
 
   /[locale]/about, /projects, /projects/[slug], /experience, /skills, /contact   (SSG)
   └─ plain content pages: indexed by search engines, minimal client JS
 
-  /[locale]/contact    form → Server Action → email service (the only server-side code)
+  /[locale]/contact    form → Server Action → email service
 ```
 
-- All pages are statically generated (`generateStaticParams` for locales), except the contact form's Server Action.
-- The scene's server-rendered markup is the **final hub state** (cat landed, objects visible), so
-  no-JS, reduced-motion and crawlers all see a complete, linkable scene. The client island adds the
-  scroll sequence on top.
-- Animation libraries and the cat animation runtime load only on the home page, never on subpages.
+- All pages are statically generated (`generateStaticParams` for locales). Request-time code is limited to
+  `src/proxy.ts` (next-intl locale redirect, matcher excludes `_next`, API and static files) and the contact
+  form's Server Action. See [DECISIONS.md](DECISIONS.md).
+- **The server renders the opening frame (`p = 0`)**, exactly what the client shows on hydration, so nothing
+  jumps when JS loads. The opening frame is the LCP.
+- **The hub is also in the server HTML**, below the first screen in normal document flow; the down arrow is
+  an `<a href="#hub">`. No-JS visitors, reduced-motion visitors and crawlers get the full content and every
+  link by scrolling or following the arrow.
+- **The client island waits for the visitor.** After hydration nothing moves until the first scroll (or
+  arrow click / keyboard scroll). Only then does the scroll-driven stage take over the part below the first
+  screen, so the switch never shifts anything visible (no CLS).
+- Animation libraries and the cat animation runtime load only on the home page, never on subpages. They
+  start loading after the LCP (on idle), at the latest on the first scroll, and never delay the first paint.
 - Images in the scene: SVG inline or `next/image` with explicit dimensions, so there is no layout shift.
 - The first screen (sky, mountains, tree, cat, title) is the LCP: keep those layers small and preloaded;
   lower layers and objects can load lazily.
@@ -53,6 +64,7 @@ Code is organized **by feature**. `app/` only does routing; pages are thin and c
 
 ```
 src/
+  proxy.ts                  # next-intl locale redirect for "/" (Next 16 name for middleware)
   app/
     [locale]/
       layout.tsx            # root for a locale: <html lang>, fonts, i18n provider, NavMenu, SkipLink
@@ -73,7 +85,7 @@ src/
     globals.css             # Tailwind import + design tokens (@theme)
   features/
     scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
-      Scene.tsx             # server component: static layered markup (final hub state)
+      Scene.tsx             # server component: opening frame + hub below (static, linkable)
       SceneAnimator.tsx     # client island: scroll progress → layer transforms
       layers/               # Sky, Mountains, Tree, Ground… (inline SVG components)
       cat/                  # cat animation wrapper
@@ -166,8 +178,8 @@ and that slugs are unique.
 
 ## i18n
 
-- Locales: `en`, `pl`. Default locale: `en` (decision in [DECISIONS.md](DECISIONS.md)).
-- Routes are always prefixed: `/en/...`, `/pl/...`. `/` redirects based on `Accept-Language`, falling back to `en`.
+- Locales: `en`, `pl`. Default locale: `en` (confirmed by the owner, see [DECISIONS.md](DECISIONS.md)).
+- Routes are always prefixed: `/en/...`, `/pl/...`. `/` redirects based on `Accept-Language`, falling back to `en` (done in `src/proxy.ts`).
 - Every page sets `<html lang>`, canonical URL and `hreflang` alternates (`en`, `pl`, `x-default` → `en`).
 - Slugs are shared between locales (simpler, fine for a portfolio).
 - The language switcher keeps the user on the equivalent page.

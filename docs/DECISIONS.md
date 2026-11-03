@@ -5,6 +5,16 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — Scene first paint is the opening frame; animation waits for the first scroll
+- **Decision:** The server renders the `p = 0` frame (sky, tree, cat, `<h1>` title, down arrow) with the
+  hub below it in normal flow. The scroll sequence starts only on the visitor's first scroll. The `<h1>`
+  fades with `opacity`/`transform` only and is never removed or hidden from the accessibility tree.
+- **Why:** Server HTML and the hydrated client then show the same first screen: no flash, no CLS, and the
+  LCP is the sky as planned. Crawlers and no-JS visitors get a visible `<h1>` and every link.
+- **Supersedes:** "server-rendered markup is the final hub state" from the scene decision below.
+- **Consequences:** See [ARCHITECTURE.md](ARCHITECTURE.md#rendering-strategy) and
+  [GAME_DESIGN.md](GAME_DESIGN.md#the-title-h1-seo-vs-the-fade-out).
+
 ### 2026-11-02 — Project structure: feature folders, two layouts, TS + MDX content
 - **Decision:**
   1. Code organized by feature (`src/features/<feature>/`) with shared `components/ui` and `components/layout`; `app/` only routes.
@@ -20,7 +30,7 @@ otherwise question or redo. Format: date, decision, why, consequences.
 ### 2026-11-02 — Default locale `en`, always-prefixed routes
 - **Decision:** `/en/...` and `/pl/...`; `/` redirects by `Accept-Language`, fallback `en`; `x-default` → `en`.
 - **Why:** English reaches the widest recruiter/client audience; explicit prefixes are simplest for hreflang and caching.
-- **Status:** proposed by agent, confirm with owner.
+- **Status:** confirmed by the owner (2026-11-03).
 
 ### 2026-11-02 — Hosting on Vercel, no custom domain yet
 - **Decision:** Deploy to Vercel (`*.vercel.app`). Canonical origin comes from `NEXT_PUBLIC_SITE_URL`.
@@ -29,7 +39,7 @@ otherwise question or redo. Format: date, decision, why, consequences.
 ### 2026-11-02 — No separate backend; Next.js serverless functions only
 - **Decision:** No standalone backend service, API server or database. All pages are statically
   generated. The only server-side code is Next.js Server Actions / route handlers deployed as Vercel
-  serverless functions: the contact form (Phase 4) and, later, the AI cat ([BACKLOG.md](BACKLOG.md)).
+  serverless functions: the contact form (Phase 4), the next-intl locale redirect in `src/proxy.ts`, and later the AI cat ([BACKLOG.md](BACKLOG.md)).
 - **Why:** Content lives in the repo and changes rarely; a portfolio's traffic does not justify running
   or maintaining a server. Serverless functions are enough to keep secrets (email/LLM API keys) off the client.
 - **Consequences:** Do not propose a separate backend, database or CMS. Spam protection starts with a
@@ -57,7 +67,7 @@ otherwise question or redo. Format: date, decision, why, consequences.
   lighter than a walkable world (no WebGL, no controls).
 - **Supersedes:** the earlier "explorable world + separate Classic mode" idea from the same day.
 - **Consequences:** No mode switcher. Scene code lives in `src/features/scene/` and loads only on the home page.
-  Server-rendered markup is the final hub state. See [GAME_DESIGN.md](GAME_DESIGN.md).
+  Server-rendered first paint is defined in the 2026-11-03 entry above. See [GAME_DESIGN.md](GAME_DESIGN.md).
 
 ### 2026-11-02 — Bilingual site: PL + EN
 - **Decision:** Full content in Polish and English with next-intl.

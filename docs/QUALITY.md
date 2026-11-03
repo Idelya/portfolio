@@ -4,7 +4,7 @@ This site represents its owner professionally. These standards are the Definitio
 
 ## Definition of Done (every task)
 
-- [ ] `npm run lint` passes with zero warnings.
+- [ ] `npm run lint` passes with zero warnings (enforced by `--max-warnings 0`).
 - [ ] `npm run build` passes.
 - [ ] Typecheck and tests pass (once set up in Phase 1).
 - [ ] Checked at **360px, 768px, 1280px and 1920px** widths.
@@ -26,7 +26,7 @@ This site represents its owner professionally. These standards are the Definitio
 | Input | Mouse, touch (incl. touch scroll momentum), keyboard |
 | Low-end | All pages fully usable on low-end Android and slow 4G |
 
-On weak devices (`saveData`, low memory) the scene may drop to the static hub (same as reduced motion), with no error.
+On weak devices (`saveData`, low memory) the scene may drop to the static composition (same as reduced motion), with no error.
 Scroll animation must stay at 60 fps on a mid-range phone: animate only `transform` and `opacity`.
 
 ## Performance budgets (mobile, Lighthouse)
@@ -61,7 +61,7 @@ Target **WCAG 2.2 AA**.
 - Color contrast AA.
 - Scene: every interactive object is a focusable link/button with a label, decorative layers are
   `aria-hidden`, no flashing above 3 Hz, looping ambient animations can be paused (WCAG 2.2.2) or stop
-  after a few seconds, and the reduced-motion static hub works fully.
+  after a few seconds, and the reduced-motion static composition works fully.
 - Screen reader smoke test (VoiceOver or NVDA) before each release.
 
 ## Testing strategy
@@ -69,7 +69,7 @@ Target **WCAG 2.2 AA**.
 | Layer | Tool | What |
 |---|---|---|
 | Unit | Vitest | Content validation (all fields translated, slugs unique), utils, hooks, scroll keyframe math (pure functions). |
-| E2E | Playwright | Navigation, language switch, mode switch, contact links, 404; on Chromium, WebKit, Firefox and mobile emulation. |
+| E2E | Playwright | Navigation, language switch, scene objects link to subpages, scene with JS disabled and with reduced motion (all links reachable, `<h1>` present), `/` locale redirect, contact links, 404; on Chromium, WebKit, Firefox and mobile emulation. |
 | A11y | `@axe-core/playwright` | Axe scan on every page in both locales, zero violations. |
 | Performance / SEO | Lighthouse CI | Budgets above, run on PR previews. |
 | Visual | Playwright screenshots (optional) | Key pages at 360 / 1280 px. |

@@ -20,7 +20,7 @@ Status legend: ⬜ missing · 🟨 draft · ✅ final (both locales)
 ### Contact and links
 - ⬜ Contact email (public)
 - ⬜ LinkedIn URL
-- ⬜ GitHub URL (`github.com/Idelya` — confirm)
+- ✅ GitHub URL: `https://github.com/Idelya` (confirmed: owner of this repo)
 - ⬜ Other profiles (Dribbble, Stack Overflow, blog…)
 
 ### Experience

@@ -23,7 +23,7 @@
 | Route segment | kebab-case | `projects/[slug]` |
 | Content slug | kebab-case, English | `weather-dashboard` |
 | i18n keys | nested, camelCase | `hero.ctaViewProjects` |
-| Feature folder | kebab-case, singular domain name | `features/contact/` |
+| Feature folder | kebab-case, same name as its route or domain | `features/contact/`, `features/projects/` |
 | Server Action file | `action.ts` (or `<verb>Action.ts` if several) inside the feature | `features/contact/action.ts` |
 | Validation schema | `schema.ts` inside the feature | `features/contact/schema.ts` |
 | Long-form content | `<slug>.<locale>.mdx` | `content/projects/weather-dashboard.pl.mdx` |

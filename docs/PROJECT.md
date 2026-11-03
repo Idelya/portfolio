@@ -41,9 +41,10 @@ Design every feature by asking: *does this help or hinder the recruiter on a pho
 
 ## Non-goals
 
-- No CMS or database. Content lives in the repo. The only server-side logic is the contact form.
+- No CMS, database or separate backend. Content lives in the repo. Server-side code is limited to Next.js
+  serverless functions (contact form, locale redirect, later the AI cat), see [DECISIONS.md](DECISIONS.md).
 - No user accounts, comments or analytics-heavy tracking.
-- No blog in the first release (may come later, see [ROADMAP.md](ROADMAP.md)).
+- No blog in the first release (may come later, see [BACKLOG.md](BACKLOG.md)).
 - No support for legacy browsers (IE, pre-2022 Safari).
 
 ## Owner

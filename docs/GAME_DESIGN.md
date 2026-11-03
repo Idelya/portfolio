@@ -35,10 +35,22 @@ heights (proposal)** drives all animation. After `p = 1` the page stops scrollin
 | **1** (hub) | Static ground scene, ambient animation only | Idle; may look towards the hovered object **(proposal)** | All objects interactive | |
 
 Rules:
+- **First paint is the `p = 0` frame**, rendered on the server. The sequence starts only on the visitor's
+  first scroll; nothing animates or jumps on load (see [ARCHITECTURE.md](ARCHITECTURE.md#rendering-strategy)).
 - Animation is **scrubbed by scroll** (scrolling back up reverses it), never on a timer, so the visitor is in control.
 - The cat's jump plays as a scroll-scrubbed animation; the landing may finish with a short time-based settle.
-- The down arrow scrolls to the hub when clicked.
+- The down arrow is a real link (`<a href="#hub">`) that scrolls to the hub, so it works without JS too.
 - Revisiting the home page from a subpage via "back" restores the hub position, not the top **(proposal)**.
+
+### The title `<h1>` (SEO vs. the fade-out)
+
+The title is the page's only `<h1>` and must count for SEO without spoiling the effect:
+- It is server-rendered and **fully visible in the `p = 0` frame**, which is what crawlers, no-JS visitors
+  and the LCP see.
+- The fade during the descent animates **only `opacity` and `transform`**. The element is never removed,
+  never `display: none`, `visibility: hidden` or `aria-hidden`, so screen readers and crawlers always find it.
+- The name stays visible in the hub through the nav menu (site name as the home link, not a heading).
+- Scrolling back to the top brings the title back.
 
 ## Interactive objects (ground hub)
 
@@ -77,12 +89,13 @@ Easter eggs play an animation or sound in place and do not navigate.
 
 ## Accessibility and fallbacks
 
-- **Reduced motion** (`prefers-reduced-motion: reduce`): no scroll-scrubbed animation. Show a static
-  composition (proposal: the ground hub with the cat already landed, title visible) where all objects are immediately available.
+- **Reduced motion** (`prefers-reduced-motion: reduce`): no scroll-scrubbed animation. Show the static
+  composition: the `p = 0` frame with the title on the first screen, the hub directly below in normal
+  document flow, all objects available at once. The down arrow jumps to the hub without smooth scrolling.
 - **Keyboard:** objects are focusable in a logical order (left → right); visible focus ring styled to the scene.
 - **Screen readers:** decorative layers are `aria-hidden`; each object has a descriptive label
   ("Mailbox — contact me"). The page has one `<h1>` (the title).
-- **No JS:** the hub renders as static layered images with working links.
+- **No JS:** the same static composition as reduced motion, with working links.
 
 ## Responsive composition
 

@@ -11,7 +11,8 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Replace boilerplate `README.md`
 
 ## Phase 1 — Stack upgrade and tooling
-- [ ] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config)
+- [ ] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
+      `next lint` is removed in Next 16: change the `lint` script to `eslint . --max-warnings 0` and update CLAUDE.md
 - [ ] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
 - [ ] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)
 - [ ] Add Prettier (+ Tailwind class sorting plugin)
@@ -24,7 +25,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] Pin Node version (`.nvmrc` + `engines`)
 
 ## Phase 2 — Skeleton: i18n, layout, SEO base
-- [ ] next-intl with `en`/`pl`, locale routing, language switcher
+- [ ] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
 - [ ] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
 - [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
 - [ ] Metadata helpers, `sitemap.ts`, `robots.ts`, OG image, JSON-LD `Person`
@@ -35,7 +36,7 @@ Each item should be a small, reviewable change (one branch / PR).
 ## Phase 3 — Scene prototype (placeholder art)
 - [ ] Owner answers GAME_DESIGN.md open questions (object → section mapping first)
 - [ ] Spike: scroll technology (CSS scroll-driven vs Motion vs GSAP) on a real mid-range phone + iOS Safari; record decision
-- [ ] Static hub (server-rendered): placeholder SVG layers, objects as links, reduced-motion / no-JS version
+- [ ] Static scene (server-rendered): `p = 0` opening frame + hub below, placeholder SVG layers, objects as links, reduced-motion / no-JS version
 - [ ] Scroll sequence: descent + parallax layers
 - [ ] Cat placeholder animation: idle on branch → jump → land → idle (scrubbed by scroll)
 - [ ] Interactive objects: idle glow/motion, hover/focus state, click reaction + navigation
