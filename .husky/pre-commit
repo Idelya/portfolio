@@ -1,2 +1,2 @@
 # Block commits that contain secrets: the repository is public (CLAUDE.md rule 0).
-scripts/gitleaks.sh git --staged --redact --no-banner
+scripts/secretlint-staged.sh

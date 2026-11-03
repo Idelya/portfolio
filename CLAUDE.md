@@ -56,7 +56,7 @@ CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs `format:check`, l
    explicitly approved as public. Secrets go only in environment variables (Vercel project settings,
    local `.env.local`); document their names in `.env.example` with empty values. If something
    sensitive was ever committed, stop and tell the owner: removing it from the latest commit is not
-   enough, the secret must be rotated. A gitleaks pre-commit hook and CI job back this up; never skip
+   enough, the secret must be rotated. A secretlint pre-commit hook and a gitleaks CI job back this up; never skip
    them with `--no-verify`. Full checklist: [docs/CONVENTIONS.md](docs/CONVENTIONS.md#public-repository-sensitive-data).
 1. **Content is server-rendered HTML first.** Portfolio information lives on static subpages,
    reachable without JavaScript or animations. The scene is progressive enhancement: its objects

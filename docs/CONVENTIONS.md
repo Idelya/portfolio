@@ -77,11 +77,12 @@ anyone and indexed by secret scanners within minutes.
 - If a secret is committed (even if not pushed yet): stop, tell the owner, and **rotate the secret**.
   Rewriting history alone is not enough once pushed.
 - Automated safeguards (they back up the checklist, they don't replace it):
-  - **Pre-commit hook** (husky, installed by `npm install`): `scripts/gitleaks.sh` scans the staged
-    changes and blocks the commit on a finding. It uses a local `gitleaks` binary or, if missing, the
-    pinned Docker image. Never bypass it with `--no-verify`; if it flags a false positive, add the
-    fingerprint to `.gitleaksignore` with a comment and tell the owner.
-  - **CI** (`secrets` job): gitleaks over the full history of all branches on every PR and push.
+  - **Pre-commit hook** (husky, installed by `npm install`, nothing else needed):
+    `scripts/secretlint-staged.sh` scans the staged version of each changed file with secretlint and
+    blocks the commit on a finding. Never bypass it with `--no-verify`. For a confirmed false positive,
+    add a `secretlint-disable-line` comment with the reason and tell the owner.
+  - **CI** (`secrets` job): gitleaks over the full history of all branches on every PR and push
+    (a second, broader rule set).
   - **GitHub** secret scanning + push protection (repository settings, enabled by the owner).
 
 ## Dependencies

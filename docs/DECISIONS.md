@@ -5,15 +5,17 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
-### 2026-11-03 — Secret scanning with gitleaks via husky and CI
+### 2026-11-03 — Secret scanning: secretlint on pre-commit, gitleaks in CI
 
-- **Decision:** husky runs `scripts/gitleaks.sh` on pre-commit (staged changes); CI runs it over the
-  full history of all branches. The script prefers a local `gitleaks` binary and falls back to the
-  pinned Docker image `ghcr.io/gitleaks/gitleaks` (version set in the script).
-- **Why:** The repo is public; a hook catches a leak before it exists in history, CI catches commits made
-  without the hook. Docker avoids a separate install and keeps one gitleaks version everywhere.
-  Not `gitleaks-action`, to avoid a third-party action and its licence terms.
-- **Consequences:** Committing needs gitleaks or a running Docker daemon. Bump the version in one place.
+- **Decision:** husky runs `scripts/secretlint-staged.sh` on pre-commit: it exports the staged files
+  from the index and scans them with secretlint (npm package). CI runs gitleaks (pinned Docker image in
+  `ci.yml`) over the full history of all branches. GitHub push protection is the third layer.
+- **Why:** The repo is public; the hook stops a leak before it is in history, CI catches commits made
+  without the hook. The owner wanted no local requirement beyond `npm install`: gitleaks needs a binary
+  or Docker, secretlint does not. lint-staged was rejected because it needs Git ≥ 2.32 (local Ubuntu
+  20.04 has 2.25). Not `gitleaks-action`, to avoid a third-party action and its licence terms.
+- **Consequences:** Two tools with different rule sets; a secret the hook misses can still fail CI.
+  Bump the gitleaks version in `ci.yml`.
 
 ### 2026-11-03 — Local e2e browsers run in the Playwright Docker image
 

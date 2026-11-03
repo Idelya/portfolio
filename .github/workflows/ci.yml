@@ -23,7 +23,10 @@ jobs:
         with:
           # Full history: a secret removed in a later commit is still public.
           fetch-depth: 0
-      - run: scripts/gitleaks.sh git --redact --no-banner --log-opts="--all"
+      - name: gitleaks
+        run: >-
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1
+          git /repo --redact --no-banner --log-opts="--all"
 
   checks:
     name: Lint, typecheck, unit tests, build
