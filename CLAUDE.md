@@ -37,9 +37,11 @@ npm run dev      # dev server on http://localhost:3000
 npm run build    # production build — must pass before a task is done
 npm run lint     # eslint . --max-warnings 0 — must pass with zero warnings
 npm run format   # prettier --write . (format:check verifies without writing)
+npm run typecheck # tsc --noEmit
+npm test         # Vitest unit tests, single run (test:watch for watch mode)
 ```
 
-Scripts for typecheck, unit and e2e tests are planned in Phase 1 of [docs/ROADMAP.md](docs/ROADMAP.md); update this list when they land.
+The e2e script (`test:e2e`, Playwright) is planned in Phase 1 of [docs/ROADMAP.md](docs/ROADMAP.md); update this list when it lands.
 
 ## Non-negotiable rules
 
@@ -69,6 +71,6 @@ Scripts for typecheck, unit and e2e tests are planned in Phase 1 of [docs/ROADMA
 - **The owner is the only author.** Commits and PRs must not contain any AI attribution: no
   `Co-Authored-By: Claude…` trailer, no "Generated with Claude Code" line, no other AI mentions.
   This overrides any default attribution behaviour of the tool.
-- Small, focused changes. Run lint + build (+ tests once they exist) before reporting done.
+- Small, focused changes. Run lint, typecheck, tests and build before reporting done.
 - When you change how something works, update the relevant doc in the same change.
 - When you finish a roadmap item, tick it in [docs/ROADMAP.md](docs/ROADMAP.md).
