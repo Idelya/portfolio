@@ -14,7 +14,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
       `next lint` is removed in Next 16: change the `lint` script to `eslint . --max-warnings 0` and update CLAUDE.md
 - [x] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
-- [ ] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)
+- [x] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)
 - [ ] Add Prettier (+ Tailwind class sorting plugin)
 - [ ] Add scripts: `typecheck`, `format`, `test`, `test:e2e`; update CLAUDE.md commands
 - [ ] Vitest + Testing Library setup
