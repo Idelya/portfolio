@@ -22,7 +22,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Vitest + Testing Library setup
 - [x] Playwright setup with mobile/desktop projects and axe
 - [x] GitHub Actions CI: lint, typecheck, unit, build, e2e
-- [ ] Secret protection: GitHub secret scanning + push protection, gitleaks in pre-commit hook and CI, `.env.example`
+- [ ] Secret protection: GitHub secret scanning + push protection, secretlint pre-commit hook, gitleaks in CI, `.env.example`
       (hook, CI and `.env.example` done; owner enables secret scanning + push protection in GitHub settings)
 - [ ] Connect Vercel; preview deploys `noindex`; set `NEXT_PUBLIC_SITE_URL`
 - [x] Pin Node version (`.nvmrc` + `engines`): Node 26
