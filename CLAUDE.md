@@ -39,9 +39,11 @@ npm run lint     # eslint . --max-warnings 0 — must pass with zero warnings
 npm run format   # prettier --write . (format:check verifies without writing)
 npm run typecheck # tsc --noEmit
 npm test         # Vitest unit tests, single run (test:watch for watch mode)
+npm run test:e2e # Playwright e2e + axe against the production build (builds and starts it on :3100)
+npm run test:e2e:docker # same, with browsers in the Playwright Docker image (local Ubuntu 20.04 is unsupported)
 ```
 
-The e2e script (`test:e2e`, Playwright) is planned in Phase 1 of [docs/ROADMAP.md](docs/ROADMAP.md); update this list when it lands.
+Pass Playwright flags after `--`, e.g. `npm run test:e2e:docker -- --project=mobile-360`.
 
 ## Non-negotiable rules
 
@@ -71,6 +73,6 @@ The e2e script (`test:e2e`, Playwright) is planned in Phase 1 of [docs/ROADMAP.m
 - **The owner is the only author.** Commits and PRs must not contain any AI attribution: no
   `Co-Authored-By: Claude…` trailer, no "Generated with Claude Code" line, no other AI mentions.
   This overrides any default attribution behaviour of the tool.
-- Small, focused changes. Run lint, typecheck, tests and build before reporting done.
+- Small, focused changes. Run lint, typecheck, unit + e2e tests and build before reporting done.
 - When you change how something works, update the relevant doc in the same change.
 - When you finish a roadmap item, tick it in [docs/ROADMAP.md](docs/ROADMAP.md).

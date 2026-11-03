@@ -5,6 +5,15 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — Local e2e browsers run in the Playwright Docker image
+
+- **Decision:** `npm run test:e2e:docker` runs the test runner on the host and the browsers in
+  `mcr.microsoft.com/playwright` (`run-server`, `--network host`). CI uses `npm run test:e2e` natively.
+- **Why:** Playwright 1.64 no longer supports the owner's Ubuntu 20.04, so browsers cannot be installed locally.
+  Running only the browsers in the container keeps host `node_modules` and the Node 26 toolchain.
+- **Consequences:** The image tag follows the installed `@playwright/test` version automatically. Drop the
+  Docker script once the local OS is upgraded.
+
 ### 2026-11-03 — Node.js 26 LTS
 
 - **Decision:** Node.js 26 (latest LTS), pinned in `.nvmrc` (`26`) and `package.json` `engines.node` (`26.x`).

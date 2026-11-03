@@ -74,3 +74,8 @@ Target **WCAG 2.2 AA**.
 | A11y              | `@axe-core/playwright`            | Axe scan on every page in both locales, zero violations.                                                                                                                                                                                       |
 | Performance / SEO | Lighthouse CI                     | Budgets above, run on PR previews.                                                                                                                                                                                                             |
 | Visual            | Playwright screenshots (optional) | Key pages at 360 / 1280 px.                                                                                                                                                                                                                    |
+
+Playwright projects (`playwright.config.ts`): `desktop-chromium`, `desktop-firefox`, `desktop-webkit`,
+`mobile-chrome` (Pixel 7), `mobile-safari` (iPhone 15) and `mobile-360` (360 px wide, touch).
+Accessibility specs use the `makeAxeBuilder` fixture from `tests/e2e/fixtures.ts`, which scans for
+WCAG 2.0–2.2 A/AA rules; expect `violations` to equal `[]`.

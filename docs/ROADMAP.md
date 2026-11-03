@@ -18,9 +18,9 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
 - [x] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)
 - [x] Add Prettier (+ Tailwind class sorting plugin)
-- [ ] Add scripts: `typecheck`, `format`, `test`, `test:e2e`; update CLAUDE.md commands (all but `test:e2e` done, it lands with Playwright)
+- [x] Add scripts: `typecheck`, `format`, `test`, `test:e2e`; update CLAUDE.md commands
 - [x] Vitest + Testing Library setup
-- [ ] Playwright setup with mobile/desktop projects and axe
+- [x] Playwright setup with mobile/desktop projects and axe
 - [ ] GitHub Actions CI: lint, typecheck, unit, build, e2e
 - [ ] Secret protection: GitHub secret scanning + push protection, gitleaks in pre-commit hook and CI, `.env.example`
 - [ ] Connect Vercel; preview deploys `noindex`; set `NEXT_PUBLIC_SITE_URL`
