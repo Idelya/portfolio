@@ -13,7 +13,7 @@ Each item should be a small, reviewable change (one branch / PR).
 ## Phase 1 — Stack upgrade and tooling
 - [x] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
       `next lint` is removed in Next 16: change the `lint` script to `eslint . --max-warnings 0` and update CLAUDE.md
-- [ ] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
+- [x] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
 - [ ] Remove scaffold leftovers (`public/next.svg`, `public/vercel.svg`, placeholder header)
 - [ ] Add Prettier (+ Tailwind class sorting plugin)
 - [ ] Add scripts: `typecheck`, `format`, `test`, `test:e2e`; update CLAUDE.md commands
@@ -22,7 +22,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] GitHub Actions CI: lint, typecheck, unit, build, e2e
 - [ ] Secret protection: GitHub secret scanning + push protection, gitleaks in pre-commit hook and CI, `.env.example`
 - [ ] Connect Vercel; preview deploys `noindex`; set `NEXT_PUBLIC_SITE_URL`
-- [ ] Pin Node version (`.nvmrc` + `engines`)
+- [x] Pin Node version (`.nvmrc` + `engines`): Node 26
 
 ## Phase 2 — Skeleton: i18n, layout, SEO base
 - [ ] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher

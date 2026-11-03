@@ -6,7 +6,10 @@ to clear content pages for recruiters and clients.
 
 ## Getting started
 
+Requires Node.js 26 (version pinned in `.nvmrc`).
+
 ```bash
+nvm use
 npm install
 npm run dev     # http://localhost:3000
 ```

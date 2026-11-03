@@ -5,6 +5,12 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — Node.js 26 LTS
+- **Decision:** Node.js 26 (latest LTS), pinned in `.nvmrc` (`26`) and `package.json` `engines.node` (`26.x`).
+- **Why:** Tailwind 4.3 needs `require()` of ES modules, which Node 20.17 does not support; Node 20 is
+  also end-of-life. The owner chose 26 over 24 for the longer support window. Vercel supports 26.x for builds and Functions.
+- **Consequences:** `engines.node` overrides the Vercel project setting. Run `nvm use` before working locally.
+
 ### 2026-11-03 — TypeScript 6.0 and ESLint 9, not the newest majors
 - **Decision:** Use TypeScript `~6.0` and ESLint `^9` with `eslint-config-next` 16 (flat config).
 - **Why:** `typescript-eslint` (used by `eslint-config-next`) supports TypeScript `<6.1` only, and
