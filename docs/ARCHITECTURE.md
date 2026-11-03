@@ -6,20 +6,20 @@
 
 ## Stack
 
-| Concern | Choice | Notes |
-|---|---|---|
-| Framework | **Next.js 16** (App Router) | Static generation by default. |
-| UI | **React 19** | Server Components by default, `"use client"` only where needed. |
-| Language | **TypeScript 6.0**, `strict: true` | No `any` without a comment explaining why. Capped below 6.1 by `typescript-eslint`, see [DECISIONS.md](DECISIONS.md). |
-| Styling | **Tailwind CSS 4** | CSS-first config: no `tailwind.config.js`, PostCSS via `@tailwindcss/postcss`. Design tokens in CSS (`@theme`), no inline style objects for static styling. |
-| i18n | **next-intl** | PL + EN, locale-prefixed routes. |
-| Scene animation | **TBD** (see [GAME_DESIGN.md](GAME_DESIGN.md#technology-open-decision)) | DOM/SVG layers. Scroll: CSS scroll-driven animations, Motion or GSAP. Cat: Rive, Lottie or sprite sheet. |
-| Contact form | Server Action + email service (**TBD**, e.g. Resend) | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit). |
-| Unit tests | **Vitest** + Testing Library | Logic, hooks, content validation. |
-| E2E tests | **Playwright** | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md). |
-| Lint / format | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + **Prettier** (`prettier-plugin-tailwindcss`) | Run directly with `eslint`; `next lint` no longer exists. `eslint-config-prettier` disables stylistic lint rules. |
-| Hosting | **Vercel** | Preview deploy per PR, production from `master`. |
-| Runtime | **Node.js 26 LTS** | Pinned in `.nvmrc` and `engines.node` (`26.x`, which Vercel also reads). |
+| Concern         | Choice                                                                                                              | Notes                                                                                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework       | **Next.js 16** (App Router)                                                                                         | Static generation by default.                                                                                                                               |
+| UI              | **React 19**                                                                                                        | Server Components by default, `"use client"` only where needed.                                                                                             |
+| Language        | **TypeScript 6.0**, `strict: true`                                                                                  | No `any` without a comment explaining why. Capped below 6.1 by `typescript-eslint`, see [DECISIONS.md](DECISIONS.md).                                       |
+| Styling         | **Tailwind CSS 4**                                                                                                  | CSS-first config: no `tailwind.config.js`, PostCSS via `@tailwindcss/postcss`. Design tokens in CSS (`@theme`), no inline style objects for static styling. |
+| i18n            | **next-intl**                                                                                                       | PL + EN, locale-prefixed routes.                                                                                                                            |
+| Scene animation | **TBD** (see [GAME_DESIGN.md](GAME_DESIGN.md#technology-open-decision))                                             | DOM/SVG layers. Scroll: CSS scroll-driven animations, Motion or GSAP. Cat: Rive, Lottie or sprite sheet.                                                    |
+| Contact form    | Server Action + email service (**TBD**, e.g. Resend)                                                                | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit).                                                                       |
+| Unit tests      | **Vitest** + Testing Library                                                                                        | Logic, hooks, content validation.                                                                                                                           |
+| E2E tests       | **Playwright**                                                                                                      | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md).                                                                                              |
+| Lint / format   | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + **Prettier** (`prettier-plugin-tailwindcss`) | Run directly with `eslint`; `next lint` no longer exists. `eslint-config-prettier` disables stylistic lint rules.                                           |
+| Hosting         | **Vercel**                                                                                                          | Preview deploy per PR, production from `master`.                                                                                                            |
+| Runtime         | **Node.js 26 LTS**                                                                                                  | Pinned in `.nvmrc` and `engines.node` (`26.x`, which Vercel also reads).                                                                                    |
 
 Exact versions live in `package.json`. Do not add a dependency without a reason; prefer the platform
 and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md).
@@ -129,15 +129,16 @@ tests/
 
 ### Module boundaries
 
-| Module | May import from | Must not import from |
-|---|---|---|
-| `app/` | `features/`, `components/`, `content/`, `lib/`, `i18n/` | — |
-| `features/<x>/` | `components/`, `content/`, `lib/`, `i18n/` | other `features/` (share via `components/` or `lib/` instead) |
-| `components/` | `lib/`, `i18n/` | `features/`, `content/` (receive data via props) |
-| `content/` | `content/types.ts` only | anything with React or Next.js |
-| `lib/` | nothing app-specific | `features/`, `components/` |
+| Module          | May import from                                         | Must not import from                                          |
+| --------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| `app/`          | `features/`, `components/`, `content/`, `lib/`, `i18n/` | —                                                             |
+| `features/<x>/` | `components/`, `content/`, `lib/`, `i18n/`              | other `features/` (share via `components/` or `lib/` instead) |
+| `components/`   | `lib/`, `i18n/`                                         | `features/`, `content/` (receive data via props)              |
+| `content/`      | `content/types.ts` only                                 | anything with React or Next.js                                |
+| `lib/`          | nothing app-specific                                    | `features/`, `components/`                                    |
 
 Rules:
+
 - `features/scene/**` is imported only by `app/[locale]/(scene)/page.tsx`. Animation libraries live only there,
   so subpages never ship scene code.
 - No barrel files (`index.ts` re-exports); import from the file directly. Keeps tree-shaking and client/server boundaries obvious.
@@ -160,10 +161,10 @@ Two kinds of text:
 type Localized<T = string> = { en: T; pl: T };
 
 interface Project {
-  slug: string;              // URL-safe, stable, English; also the MDX file name
+  slug: string; // URL-safe, stable, English; also the MDX file name
   title: Localized;
-  summary: Localized;        // 1–2 sentences, used in cards and meta descriptions
-  hasBody: boolean;          // true → <slug>.en.mdx and <slug>.pl.mdx must exist
+  summary: Localized; // 1–2 sentences, used in cards and meta descriptions
+  hasBody: boolean; // true → <slug>.en.mdx and <slug>.pl.mdx must exist
   stack: string[];
   links: { live?: string; repo?: string };
   image?: { src: string; alt: Localized };
@@ -187,6 +188,7 @@ and that slugs are unique.
 ## SEO building blocks
 
 See [QUALITY.md](QUALITY.md#seo) for the checklist. Implementation lives in:
+
 - `generateMetadata` per page (title, description, canonical, alternates, Open Graph, Twitter).
 - `src/app/sitemap.ts`, `src/app/robots.ts`.
 - JSON-LD: `Person` on home, `CreativeWork`/`SoftwareSourceCode` on project pages, helpers in `src/lib/seo.ts`.

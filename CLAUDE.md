@@ -18,17 +18,17 @@ Contact…). A persistent navigation menu gives recruiters a direct path. See [d
 
 ## Docs map
 
-| Doc | Read when |
-|---|---|
-| [docs/PROJECT.md](docs/PROJECT.md) | Always, once. Vision, audiences, goals, non-goals. |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Adding routes, components, content, i18n, anything structural. |
-| [docs/CONVENTIONS.md](docs/CONVENTIONS.md) | Writing any code or committing. |
-| [docs/QUALITY.md](docs/QUALITY.md) | Before calling any task done. Definition of Done, SEO, a11y, perf budgets, devices. |
-| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) | Working on the home scene, animations, interactive objects, art. |
-| [docs/CONTENT.md](docs/CONTENT.md) | Adding or editing text, projects, bio, images. |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Picking up work. Current phase and next tasks. |
-| [docs/BACKLOG.md](docs/BACKLOG.md) | Owner mentions an idea "for later". Add it here; don't implement unless asked. |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Before changing a technical choice. Log new decisions here. |
+| Doc                                          | Read when                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [docs/PROJECT.md](docs/PROJECT.md)           | Always, once. Vision, audiences, goals, non-goals.                                  |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Adding routes, components, content, i18n, anything structural.                      |
+| [docs/CONVENTIONS.md](docs/CONVENTIONS.md)   | Writing any code or committing.                                                     |
+| [docs/QUALITY.md](docs/QUALITY.md)           | Before calling any task done. Definition of Done, SEO, a11y, perf budgets, devices. |
+| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md)   | Working on the home scene, animations, interactive objects, art.                    |
+| [docs/CONTENT.md](docs/CONTENT.md)           | Adding or editing text, projects, bio, images.                                      |
+| [docs/ROADMAP.md](docs/ROADMAP.md)           | Picking up work. Current phase and next tasks.                                      |
+| [docs/BACKLOG.md](docs/BACKLOG.md)           | Owner mentions an idea "for later". Add it here; don't implement unless asked.      |
+| [docs/DECISIONS.md](docs/DECISIONS.md)       | Before changing a technical choice. Log new decisions here.                         |
 
 ## Commands
 

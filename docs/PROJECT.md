@@ -12,14 +12,14 @@ creativity and attention to detail.
 
 ## Audiences
 
-| Audience | What they need | Time budget | Main path |
-|---|---|---|---|
-| **Recruiter / HR** | Name, role, key skills, experience, CV download, contact. Fast. | 30–90 s, often on mobile | Navigation menu → subpages |
-| **Hiring manager / tech lead** | Depth: projects, tech decisions, code (GitHub), how she thinks. | 3–10 min, desktop | Scene + project pages |
-| **Potential client** | What she can build for them, past work, how to get in touch. | 1–5 min | Scene as a hook, then subpages |
-| **Curious visitor / developer** | The fun part: explore, find easter eggs. | Open-ended | Scene |
+| Audience                        | What they need                                                  | Time budget              | Main path                      |
+| ------------------------------- | --------------------------------------------------------------- | ------------------------ | ------------------------------ |
+| **Recruiter / HR**              | Name, role, key skills, experience, CV download, contact. Fast. | 30–90 s, often on mobile | Navigation menu → subpages     |
+| **Hiring manager / tech lead**  | Depth: projects, tech decisions, code (GitHub), how she thinks. | 3–10 min, desktop        | Scene + project pages          |
+| **Potential client**            | What she can build for them, past work, how to get in touch.    | 1–5 min                  | Scene as a hook, then subpages |
+| **Curious visitor / developer** | The fun part: explore, find easter eggs.                        | Open-ended               | Scene                          |
 
-Design every feature by asking: *does this help or hinder the recruiter on a phone?*
+Design every feature by asking: _does this help or hinder the recruiter on a phone?_
 
 ## Structure: scene + subpages
 

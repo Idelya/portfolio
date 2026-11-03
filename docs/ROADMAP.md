@@ -4,6 +4,7 @@ Work in phases; finish and verify a phase before the next one. Tick items as the
 Each item should be a small, reviewable change (one branch / PR).
 
 ## Phase 0 — Foundations for AI-assisted work (in progress)
+
 - [x] `CLAUDE.md` with rules and docs map
 - [x] Docs: project, architecture, conventions, quality, game design, content, decisions, roadmap
 - [ ] Owner reviews docs and answers open questions (DECISIONS.md "Pending", GAME_DESIGN.md, CONTENT.md)
@@ -11,6 +12,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Replace boilerplate `README.md`
 
 ## Phase 1 — Stack upgrade and tooling
+
 - [x] Upgrade to Next 16, React 19, TypeScript (latest supported by Next), ESLint (flat config).
       `next lint` is removed in Next 16: change the `lint` script to `eslint . --max-warnings 0` and update CLAUDE.md
 - [x] Migrate Tailwind 3 → 4 (CSS-first config, `@tailwindcss/postcss`)
@@ -25,6 +27,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [x] Pin Node version (`.nvmrc` + `engines`): Node 26
 
 ## Phase 2 — Skeleton: i18n, layout, SEO base
+
 - [ ] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
 - [ ] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
 - [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
@@ -34,6 +37,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] 404 page
 
 ## Phase 3 — Scene prototype (placeholder art)
+
 - [ ] Owner answers GAME_DESIGN.md open questions (object → section mapping first)
 - [ ] Spike: scroll technology (CSS scroll-driven vs Motion vs GSAP) on a real mid-range phone + iOS Safari; record decision
 - [ ] Static scene (server-rendered): `p = 0` opening frame + hub below, placeholder SVG layers, objects as links, reduced-motion / no-JS version
@@ -45,6 +49,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] One easter egg end-to-end
 
 ## Phase 4 — Content subpages (MVP, shippable)
+
 - [ ] About
 - [ ] Projects list + project detail pages
 - [ ] Experience
@@ -57,6 +62,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] **Launch v1** on Vercel (placeholder art acceptable only if it looks intentional)
 
 ## Phase 5 — Final art and polish
+
 - [ ] Final illustrations and cat animation replace placeholders (see GAME_DESIGN.md asset spec)
 - [ ] Page transitions between scene and subpages
 - [ ] Remaining easter eggs, ambient animations, optional sound

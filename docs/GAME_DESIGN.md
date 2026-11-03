@@ -27,14 +27,15 @@ The game feeling comes from discovery, motion and reactive objects, not from con
 The scene is a sticky, full-viewport stage. Scroll progress `p` (0 → 1) over roughly **3 viewport
 heights (proposal)** drives all animation. After `p = 1` the page stops scrolling: the ground hub is the end.
 
-| Progress | Camera / background | Cat | Foreground | UI |
-|---|---|---|---|---|
-| **0** (landing) | Sky and mountain range, camera high up | Sits on a tree branch in the foreground, idle animation (tail swish, blink) | Tree | Site title ("Anna Papros-Matejuk — Portfolio") and a pulsing **down arrow** |
-| **0 → 0.6** | Camera descends smoothly. Parallax: far mountains move slowest, nearer layers faster, giving a real perspective change | Jumps from the tree (anticipation → leap → fall) | Tree slides up and out; ground layers rise into view | Title and arrow fade out |
-| **0.6 → 1** | Settles on the ground level | Lands (squash, small dust puff), then idles on the ground | Interactive objects appear; they **glow or move** to signal they are clickable | Navigation stays available |
-| **1** (hub) | Static ground scene, ambient animation only | Idle; may look towards the hovered object **(proposal)** | All objects interactive | |
+| Progress        | Camera / background                                                                                                    | Cat                                                                         | Foreground                                                                     | UI                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **0** (landing) | Sky and mountain range, camera high up                                                                                 | Sits on a tree branch in the foreground, idle animation (tail swish, blink) | Tree                                                                           | Site title ("Anna Papros-Matejuk — Portfolio") and a pulsing **down arrow** |
+| **0 → 0.6**     | Camera descends smoothly. Parallax: far mountains move slowest, nearer layers faster, giving a real perspective change | Jumps from the tree (anticipation → leap → fall)                            | Tree slides up and out; ground layers rise into view                           | Title and arrow fade out                                                    |
+| **0.6 → 1**     | Settles on the ground level                                                                                            | Lands (squash, small dust puff), then idles on the ground                   | Interactive objects appear; they **glow or move** to signal they are clickable | Navigation stays available                                                  |
+| **1** (hub)     | Static ground scene, ambient animation only                                                                            | Idle; may look towards the hovered object **(proposal)**                    | All objects interactive                                                        |                                                                             |
 
 Rules:
+
 - **First paint is the `p = 0` frame**, rendered on the server. The sequence starts only on the visitor's
   first scroll; nothing animates or jumps on load (see [ARCHITECTURE.md](ARCHITECTURE.md#rendering-strategy)).
 - Animation is **scrubbed by scroll** (scrolling back up reverses it), never on a timer, so the visitor is in control.
@@ -45,6 +46,7 @@ Rules:
 ### The title `<h1>` (SEO vs. the fade-out)
 
 The title is the page's only `<h1>` and must count for SEO without spoiling the effect:
+
 - It is server-rendered and **fully visible in the `p = 0` frame**, which is what crawlers, no-JS visitors
   and the LCP see.
 - The fade during the descent animates **only `opacity` and `transform`**. The element is never removed,
@@ -56,17 +58,18 @@ The title is the page's only `<h1>` and must count for SEO without spoiling the 
 
 Each object is a real link or button in the DOM (not a canvas hit area), with an accessible label.
 
-| Object | Leads to | Type |
-|---|---|---|
-| **Mailbox** | `/[locale]/contact`: contact page with a form to send an email | Content |
-| TBD | About me | Content |
-| TBD | Projects (list → project detail pages) | Content |
-| TBD | Experience | Content |
-| TBD | Skills | Content |
-| TBD | CV download | Content |
-| TBD | e.g. a firefly swarm, a sleeping owl, a magic flower | Easter egg |
+| Object      | Leads to                                                       | Type       |
+| ----------- | -------------------------------------------------------------- | ---------- |
+| **Mailbox** | `/[locale]/contact`: contact page with a form to send an email | Content    |
+| TBD         | About me                                                       | Content    |
+| TBD         | Projects (list → project detail pages)                         | Content    |
+| TBD         | Experience                                                     | Content    |
+| TBD         | Skills                                                         | Content    |
+| TBD         | CV download                                                    | Content    |
+| TBD         | e.g. a firefly swarm, a sleeping owl, a magic flower           | Easter egg |
 
 Interactivity signals:
+
 - **Idle:** a gentle glow pulse or small looped motion, staggered so not everything pulses at once.
 - **Hover / focus:** stronger glow, slight scale-up, cursor pointer, tooltip-like label with the section name.
 - **Touch devices:** there is no hover, so labels are shown permanently or after first tap **(proposal: always visible small labels on mobile)**.
@@ -105,6 +108,7 @@ and reachable) with the same feel. No horizontal panning, nothing cut off. This 
 parts of the project: plan for it from the first prototype, do not bolt it on later.
 
 Approach:
+
 - **Aspect-ratio layouts, not just width breakpoints.** Define compositions per aspect-ratio class,
   e.g. tall portrait (≤ 9:16), portrait (≈ 3:4), landscape (≈ 16:10 / 16:9) and ultra-wide (≥ 21:9).
   Pick the layout from `aspect-ratio` media queries (and `min-height` for very short landscape phones).
@@ -139,11 +143,11 @@ use the same dimensions, anchors and file names as the final art, so swapping as
 
 The scene is DOM/SVG based (no WebGL needed). To be decided with a spike:
 
-| Concern | Candidates |
-|---|---|
+| Concern                | Candidates                                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | Scroll-driven parallax | CSS scroll-driven animations (`animation-timeline`, no JS, check Safari support) · Motion (`useScroll`/`useTransform`) · GSAP ScrollTrigger |
-| Cat animation | Rive (state machines, scrubbable, small files) · Lottie · CSS sprite sheet |
-| Page transitions | View Transitions API (Next.js support) · Motion |
+| Cat animation          | Rive (state machines, scrubbable, small files) · Lottie · CSS sprite sheet                                                                  |
+| Page transitions       | View Transitions API (Next.js support) · Motion                                                                                             |
 
 Record the choice in [DECISIONS.md](DECISIONS.md).
 
