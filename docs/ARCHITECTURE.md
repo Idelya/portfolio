@@ -17,7 +17,7 @@
 | Contact form | Server Action + email service (**TBD**, e.g. Resend) | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit). |
 | Unit tests | **Vitest** + Testing Library | Logic, hooks, content validation. |
 | E2E tests | **Playwright** | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md). |
-| Lint / format | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + Prettier | Run directly with `eslint`; `next lint` no longer exists. |
+| Lint / format | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + **Prettier** (`prettier-plugin-tailwindcss`) | Run directly with `eslint`; `next lint` no longer exists. `eslint-config-prettier` disables stylistic lint rules. |
 | Hosting | **Vercel** | Preview deploy per PR, production from `master`. |
 | Runtime | **Node.js 26 LTS** | Pinned in `.nvmrc` and `engines.node` (`26.x`, which Vercel also reads). |
 

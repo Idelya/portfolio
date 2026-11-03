@@ -33,6 +33,7 @@ Where code goes and what may import what: [ARCHITECTURE.md](ARCHITECTURE.md#dire
 
 ## Styling
 
+- Formatting is Prettier's job (`npm run format`); class order is sorted automatically, don't hand-sort.
 - Tailwind utility classes in JSX. Extract a component, not a CSS class, when a pattern repeats.
 - Design tokens (colors, fonts, spacing scale, radii) defined once in `globals.css` via `@theme`.
   No raw hex values in components.
