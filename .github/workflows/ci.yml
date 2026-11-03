@@ -5,10 +5,11 @@ on:
     branches: [master]
   pull_request:
 
-# A newer push to the same branch or PR cancels the run in progress.
+# A newer push to a PR cancels its run in progress; runs on master always finish so every
+# commit there gets a status.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read

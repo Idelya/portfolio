@@ -79,10 +79,13 @@ anyone and indexed by secret scanners within minutes.
 - Automated safeguards (they back up the checklist, they don't replace it):
   - **Pre-commit hook** (husky, installed by `npm install`, nothing else needed):
     `scripts/secretlint-staged.sh` scans the staged version of each changed file with secretlint and
-    blocks the commit on a finding. Never bypass it with `--no-verify`. For a confirmed false positive,
-    add a `secretlint-disable-line` comment with the reason and tell the owner.
+    blocks the commit on a finding. Never bypass it with `--no-verify`.
   - **CI** (`secrets` job): gitleaks over the full history of all branches on every PR and push
     (a second, broader rule set).
+  - **Confirmed false positive** (tell the owner first): the two tools need separate markers. For
+    secretlint, a `secretlint-disable-line` comment on the line. For gitleaks, a `gitleaks:allow`
+    comment on the line, or, where comments are impossible (JSON, lockfiles) or the finding is already
+    in history, its fingerprint from the CI log in `.gitleaksignore`, with a comment explaining why.
   - **GitHub** secret scanning + push protection (repository settings, enabled by the owner).
 
 ## Dependencies

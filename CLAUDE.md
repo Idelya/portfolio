@@ -45,7 +45,7 @@ npm run test:e2e:docker # same, with browsers in the Playwright Docker image (lo
 
 Pass Playwright flags after `--`, e.g. `npm run test:e2e:docker -- --project=mobile-360`.
 
-CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs `format:check`, lint, typecheck, unit tests and build in one job and the e2e suite in another, on every PR and push to `master`.
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) has three parallel jobs on every PR and push to `master`: `secrets` (gitleaks over the full history), `checks` (`format:check`, lint, typecheck, unit tests, build) and `e2e` (Playwright + axe).
 
 ## Non-negotiable rules
 
