@@ -113,11 +113,14 @@ src/
     experience.ts
     skills.ts
   i18n/
-    routing.ts              # locales, default locale
-    request.ts
+    routing.ts              # locales, default locale, prefix/cookie options
+    navigation.ts           # locale-aware Link, usePathname, redirect (use instead of next/link)
+    request.ts              # loads the messages for the request locale
   messages/
-    en.json                 # UI strings (buttons, labels, aria-labels, scene object labels)
+    en.json                 # UI strings (buttons, labels, aria-labels, scene object labels); reference catalogue
     pl.json
+    messages.test.ts        # both catalogues have the same keys, no empty strings
+  global.d.ts               # next-intl AppConfig: typed locales and message keys
   lib/                      # framework-agnostic helpers (seo.ts, formatDate.ts, env.ts)
 public/
   scene/                    # raster scene art (same file names for placeholder and final art)
@@ -183,7 +186,12 @@ and that slugs are unique.
 - Routes are always prefixed: `/en/...`, `/pl/...`. `/` redirects based on `Accept-Language`, falling back to `en` (done in `src/proxy.ts`).
 - Every page sets `<html lang>`, canonical URL and `hreflang` alternates (`en`, `pl`, `x-default` → `en`).
 - Slugs are shared between locales (simpler, fine for a portfolio).
-- The language switcher keeps the user on the equivalent page.
+- The language switcher keeps the user on the equivalent page. Its links are server-rendered, so it works without JS.
+- No locale cookie (`localeCookie: false`): `/` always follows `Accept-Language`, and the site sets no cookies.
+- Message keys are type-checked against `en.json` (`src/global.d.ts`). `messages.test.ts` fails when a
+  key is missing or empty in any locale.
+- Every page and layout under `[locale]` calls `setRequestLocale(locale)` before using translations,
+  so pages stay statically rendered.
 
 ## SEO building blocks
 

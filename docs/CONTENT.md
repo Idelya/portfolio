@@ -17,6 +17,8 @@ Status legend: ⬜ missing · 🟨 draft · ✅ final (both locales)
 - ⬜ Location / remote availability
 - ⬜ Availability status (open to work? freelance?)
 - ⬜ Professional photo or avatar (also used for OG image)
+- 🟨 Site title and meta description (`metadata` in `src/messages/*.json`): placeholder
+  "Anna Papros-Matejuk — Portfolio" / "Portfolio of Anna Papros-Matejuk, software developer." until the headline is final
 
 ### Contact and links
 

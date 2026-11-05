@@ -5,6 +5,18 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-03 — i18n: no locale cookie, hreflang only from metadata
+
+- **Decision:** next-intl routing with `localeCookie: false` and `alternateLinks: false`. The install
+  scripts of `@swc/core` and `@parcel/watcher` (next-intl's optional message extractor) are denied in
+  `package.json` `allowScripts`.
+- **Why:** The docs specify `/` → `Accept-Language`, fallback `en`; a cookie adds nothing a visitor
+  can't get from the language switcher and would be the site's first cookie (consent questions).
+  hreflang will come from page metadata, so a second source in a `Link` header is redundant. The
+  extractor is unused, so its native build and postinstall scripts are not needed.
+- **Consequences:** A visitor who switched to Polish and later opens `/` with an English browser lands
+  on `/en`. If the extractor is ever adopted, revisit `allowScripts`.
+
 ### 2026-11-03 — Scene objects: five objects on three height levels; the cat is About
 
 - **Decision:** The opening frame shows only a branch reaching in from a side edge with the cat on it

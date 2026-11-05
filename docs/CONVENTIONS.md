@@ -6,7 +6,8 @@
 - Named exports only (except where Next.js requires a default export: `page.tsx`, `layout.tsx`, etc.).
 - Server Components by default. Add `"use client"` at the lowest possible component, never on a whole page.
 - No hardcoded user-facing strings. UI text → `messages/*.json`, portfolio content → `src/content/`.
-- Use `next/image` for images, `next/link` for internal links, `next/font` for fonts (self-hosted, no layout shift).
+- Use `next/image` for images, `next/font` for fonts. Internal links and navigation hooks come from
+  `@/i18n/navigation` (locale-aware `Link`, `usePathname`, `redirect`…), never from `next/link` or `next/navigation` directly (fonts self-hosted, no layout shift).
 - Accessibility is part of the component, not an afterthought: semantic elements first (`button`, `nav`, `main`,
   headings in order), ARIA only when semantics are not enough.
 - Animations: CSS first. JS animation only when needed. Always provide a `prefers-reduced-motion` fallback.

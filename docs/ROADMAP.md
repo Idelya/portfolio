@@ -29,7 +29,8 @@ Each item should be a small, reviewable change (one branch / PR).
 
 ## Phase 2 — Skeleton: i18n, layout, SEO base
 
-- [ ] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
+- [x] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
+      (switcher sits in a temporary header until the root layout task moves it into the nav menu)
 - [ ] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
 - [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
 - [ ] Metadata helpers, `sitemap.ts`, `robots.ts`, OG image, JSON-LD `Person`
