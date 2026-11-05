@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { NavMenu } from "@/components/layout/NavMenu";
+import { SkipLink } from "@/components/layout/SkipLink";
+import { profile } from "@/content/profile";
 import { routing } from "@/i18n/routing";
 
 import { fontVariables } from "../fonts";
@@ -13,19 +14,16 @@ import "../globals.css";
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
 }
 
+// Still required for static rendering; the locale itself is read via next/root-params in
+// src/i18n/request.ts, which also rejects unknown locales with notFound().
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: Omit<LocaleLayoutProps, "children">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) return {};
-  const t = await getTranslations({ locale, namespace: "metadata" });
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metadata");
 
   return {
     title: t("title"),
@@ -33,24 +31,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: LocaleLayoutProps) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-
-  // Enables static rendering for this locale.
-  setRequestLocale(locale);
+export default async function LocaleLayout({ children }: LocaleLayoutProps) {
+  const locale = await getLocale();
 
   return (
     <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>
-          {/* Temporary placement: moves into NavMenu with the root layout task (ROADMAP Phase 2). */}
-          <header>
-            <LanguageSwitcher />
-          </header>
+          <SkipLink />
+          <NavMenu siteName={profile.name} />
           {children}
         </NextIntlClientProvider>
       </body>

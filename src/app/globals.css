@@ -97,9 +97,13 @@
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 
+  /* Layout */
+  --spacing-header: 3.5rem; /* nav bar height: h-header, top-header, scroll-mt-header */
+
   /* Effects */
   --shadow-glow: 0 0 1.5rem
     color-mix(in oklab, var(--color-glow) 60%, transparent);
+  --drop-shadow-glow: 0 0 0.75rem var(--color-glow);
   --ease-magic: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -107,6 +111,12 @@
   :root {
     /* Dark only for v1, regardless of the system setting. The theme toggle will switch this. */
     color-scheme: dark;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {

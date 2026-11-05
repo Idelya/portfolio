@@ -5,6 +5,53 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-05 — Static scene: placeholder SVG, objects sized by min(width, height)
+
+- **Decision:** The home page renders the static composition on the server: the opening frame
+  (sky, mountains, branch with a decorative cat, `<h1>`, down arrow to `#hub`) and the hub with five
+  object links positioned from `features/scene/config.ts`. Two layouts for now, chosen by
+  orientation (Tailwind `portrait:`). Object width = `min(width% of hub width, widthByHeight% of hub
+height)` via container query units. Labels are always visible. No scroll animation yet.
+- **Why:** The owner wants a skeleton to work on illustrations against. Sizing by one axis only broke
+  on short phones (iPhone 15 in Playwright); capping by both axes keeps all gaps at every aspect
+  ratio, verified by a unit test over 11 hub sizes and an e2e overlap check on every device project.
+- **Consequences:** The aspect-ratio layouts task builds on this (more layouts, same data shape).
+  The scroll animation enhances this markup without changing it. Final art replaces the SVG
+  components one by one, keeping the canvases listed in GAME_DESIGN.md.
+
+### 2026-11-05 — Import boundaries via no-restricted-imports
+
+- **Decision:** Module boundaries from ARCHITECTURE.md are ESLint `no-restricted-imports` regex
+  patterns, one config per directory, with a per-feature rule generated from `src/features/*`.
+- **Why:** No extra dependency. Regexes, because gitignore-style negation (`!@/content/types`)
+  cannot re-allow a path once its parent pattern matched.
+- **Consequences:** The rule sees only `@/` imports; a relative import across modules would slip
+  through, which code review catches (convention: relative imports only within a module).
+
+### 2026-11-05 — Locale from next/root-params instead of setRequestLocale
+
+- **Decision:** `src/i18n/request.ts` reads the locale with `next/root-params` (explicit `locale`
+  argument first) and calls `notFound()` for unknown values. Pages and layouts drop the locale
+  `params` and `setRequestLocale`; `generateStaticParams` stays in `[locale]/layout.tsx`.
+- **Why:** next-intl 4.14 deprecated `setRequestLocale` and `requestLocale` in favour of Next 16 root
+  params. Less boilerplate per page, and no page can forget the call and drop out of static rendering.
+- **Consequences:** `app/[locale]/layout.tsx` must remain the only root layout. Server Actions (the
+  contact form) must pass the locale explicitly until Next supports root params there.
+
+### 2026-11-05 — Mobile nav menu is a native popover
+
+- **Decision:** Below `lg`, the section links sit in a `popover="auto"` element opened by a
+  `popovertarget` button; from `lg` up, the same element is restyled as an inline list. The language
+  switcher stays outside the popover, always visible, showing locale codes (`EN`/`PL`) with the full
+  language name added for screen readers. Skills is in the menu even though the first draft of
+  GAME_DESIGN.md left it out (CLAUDE.md rule 2: every section directly reachable).
+- **Why:** The popover opens, closes on Esc and closes on outside tap without JavaScript, which
+  fits the no-JS rule and needs no focus-handling code. One list for both layouts means no duplicate
+  links. Codes keep the header within 360px.
+- **Consequences:** The only client code closes the popover after a link is followed, since
+  client-side navigation keeps the layout mounted. The visible code must stay part of the accessible
+  name (axe `label-content-name-mismatch`, WCAG 2.5.3), so no `aria-label` on the switcher links.
+
 ### 2026-11-05 — Dark theme only for v1; light theme with a toggle later
 
 - **Decision:** v1 renders only the dark theme (`color-scheme: dark` on `:root`), regardless of the

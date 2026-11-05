@@ -9,5 +9,35 @@
       "en": "English",
       "pl": "Polski"
     }
+  },
+  "skipLink": {
+    "label": "Przejdź do treści"
+  },
+  "nav": {
+    "label": "Główna",
+    "menu": "Menu",
+    "links": {
+      "about": "O mnie",
+      "projects": "Projekty",
+      "experience": "Doświadczenie",
+      "skills": "Umiejętności",
+      "contact": "Kontakt"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} {name}",
+    "github": "GitHub"
+  },
+  "scene": {
+    "titleSuffix": "Portfolio",
+    "toHub": "Zejdź na polanę",
+    "hubLabel": "Polana",
+    "objects": {
+      "signpost": "Drogowskaz",
+      "skillTree": "Drzewo umiejętności",
+      "cat": "Kot",
+      "chest": "Skrzynia ze skarbem",
+      "mailbox": "Skrzynka pocztowa"
+    }
   }
 }

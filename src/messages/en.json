@@ -9,5 +9,35 @@
       "en": "English",
       "pl": "Polski"
     }
+  },
+  "skipLink": {
+    "label": "Skip to main content"
+  },
+  "nav": {
+    "label": "Main",
+    "menu": "Menu",
+    "links": {
+      "about": "About",
+      "projects": "Projects",
+      "experience": "Experience",
+      "skills": "Skills",
+      "contact": "Contact"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} {name}",
+    "github": "GitHub"
+  },
+  "scene": {
+    "titleSuffix": "Portfolio",
+    "toHub": "Go down to the meadow",
+    "hubLabel": "Meadow",
+    "objects": {
+      "signpost": "Signpost",
+      "skillTree": "Skill tree",
+      "cat": "Cat",
+      "chest": "Treasure chest",
+      "mailbox": "Mailbox"
+    }
   }
 }

@@ -86,7 +86,7 @@ Interactivity signals:
 
 - **Idle:** a gentle glow pulse or small looped motion, staggered so not everything pulses at once.
 - **Hover / focus:** stronger glow, slight scale-up, cursor pointer, tooltip-like label with the section name.
-- **Touch devices:** there is no hover, so labels are shown permanently or after first tap **(proposal: always visible small labels on mobile)**.
+- **Labels are always visible** on every device (placeholder phase): a small pill under each object with the section name. There is no hover on touch devices, and it tells recruiters at a glance where each object leads. Revisit with the final art.
 - **Click / tap:** short reaction animation (≤ 300 ms), then navigation with a page transition.
 
 Easter eggs play an animation or sound in place and do not navigate.
@@ -101,7 +101,9 @@ Easter eggs play an animation or sound in place and do not navigate.
 ## Navigation for recruiters
 
 - A **persistent navigation menu** is visible on the scene and all subpages: About, Projects,
-  Experience, Contact, CV, language switch. On mobile it collapses into a menu button.
+  Experience, Skills, Contact, CV (added with the CV PDF in Phase 4), language switch (always visible,
+  as `EN`/`PL`). Below the `lg` breakpoint the section links collapse into a menu button that opens
+  a native popover, so the menu also works without JavaScript.
 - The menu works without scrolling through the animation. Recruiters never have to play.
 
 ## Accessibility and fallbacks
@@ -135,6 +137,9 @@ Approach:
   for wide/tall screens. Use `svh`/`dvh` units so mobile browser toolbars do not break the stage height.
 - **Scroll distance and parallax depth may differ per layout** so the descent feels the same on a tall phone and a wide monitor.
 - **Tap targets ≥ 44×44 px** regardless of artwork size; labels never overlap each other or the cat.
+- **Object size = min(a % of the hub width, a % of the hub height).** Positions are % of width (x)
+  and % of height (y), so with both caps the gaps between objects hold at every aspect ratio within
+  a layout. The hub is a size container; CSS uses `cqw`/`cqh`.
 - **Verification:** Playwright screenshot tests of the hub at a fixed viewport matrix
   (360×740, 390×844, 768×1024, 1024×768, 1280×800, 1920×1080, 2560×1080, 740×360 landscape phone),
   plus an automated check that every object is inside the viewport and objects do not overlap.
@@ -146,6 +151,20 @@ layered mountain silhouettes, a branch, a cat silhouette, simple object shapes (
 use the same dimensions, anchors and file names as the final art, so swapping assets requires no code changes.
 
 ## Asset specification (for whoever draws the final art)
+
+Canvases used by the placeholders (keep them, or update the components and `config.ts` together):
+
+| Asset                                     | Canvas (viewBox)            | Anchor / crop                                              |
+| ----------------------------------------- | --------------------------- | ---------------------------------------------------------- |
+| Sky (stars, moon; gradient behind in CSS) | 1920×1080                   | top center, cropped (`xMidYMin slice`)                     |
+| Far mountains, mid mountains, near hills  | 1920×1080 each              | bottom center, cropped (`xMidYMax slice`)                  |
+| Branch with the cat                       | 600×240                     | left edge, about 14% from the top, up to 70vw / 36rem wide |
+| Hub ground (back hill + meadow)           | 1920×1080                   | bottom center, cropped                                     |
+| Signpost / skill tree / cat on boulder    | 100×140 / 100×110 / 100×100 | object box; height ÷ width = `aspect` in `config.ts`       |
+| Treasure chest / mailbox                  | 100×75 / 100×150            | object box                                                 |
+
+Keep important content of 1920×1080 layers inside the middle third horizontally: tall phones show
+only a narrow vertical slice of them. Objects are separate files, scaled to their box.
 
 - Separate layers per depth: sky, far mountains, mid mountains, near hills, branch, ground, each object, cat.
 - Vector (SVG) where the style allows; otherwise PNG/WebP at 2× the largest display size, transparent background.

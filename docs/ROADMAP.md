@@ -30,11 +30,11 @@ Each item should be a small, reviewable change (one branch / PR).
 ## Phase 2 — Skeleton: i18n, layout, SEO base
 
 - [x] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
-      (switcher sits in a temporary header until the root layout task moves it into the nav menu)
 - [x] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
-- [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
+- [x] Root layout: persistent nav menu (mobile menu button), footer, skip link
+      (footer lives in the `(pages)` layout: the scene has none)
 - [ ] Metadata helpers, `sitemap.ts`, `robots.ts`, OG image, JSON-LD `Person`
-- [ ] Folder structure per ARCHITECTURE.md: `features/`, route groups `(scene)` and `(pages)`, ESLint import-boundary rule
+- [x] Folder structure per ARCHITECTURE.md: `features/`, route groups `(scene)` and `(pages)`, ESLint import-boundary rule
 - [ ] Content types + `@next/mdx` + validation test (all locales filled, MDX files present, unique slugs)
 - [ ] 404 page
 
@@ -42,11 +42,12 @@ Each item should be a small, reviewable change (one branch / PR).
 
 - [ ] Owner answers GAME_DESIGN.md open questions (object → section mapping first)
 - [ ] Spike: scroll technology (CSS scroll-driven vs Motion vs GSAP) on a real mid-range phone + iOS Safari; record decision
-- [ ] Static scene (server-rendered): `p = 0` opening frame + hub below, placeholder SVG layers, objects as links, reduced-motion / no-JS version
+- [x] Static scene (server-rendered): `p = 0` opening frame + hub below, placeholder SVG layers, objects as links, reduced-motion / no-JS version
 - [ ] Scroll sequence: descent + parallax layers
 - [ ] Cat placeholder animation: idle on branch → jump → land → idle (scrubbed by scroll)
 - [ ] Interactive objects: idle glow/motion, hover/focus state, click reaction + navigation
 - [ ] Aspect-ratio layouts (tall portrait, portrait, landscape, ultra-wide) with rearranged objects; start this early, it is the hardest part
+      (started: portrait + landscape in `config.ts`, checked for overlaps at 11 hub sizes by `config.test.ts`)
 - [ ] Viewport-matrix screenshot tests + "all objects in viewport, no overlap" check
 - [ ] One easter egg end-to-end
 

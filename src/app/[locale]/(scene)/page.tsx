@@ -1,14 +1,10 @@
-import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { MAIN_CONTENT_ID } from "@/components/layout/SkipLink";
+import { Scene } from "@/features/scene/Scene";
 
-interface HomeProps {
-  params: Promise<{ locale: string }>;
-}
-
-export default async function Home({ params }: HomeProps) {
-  const { locale } = await params;
-  // The locale layout has already rejected unknown locales with notFound().
-  setRequestLocale(locale as Locale);
-
-  return <main />;
+export default function Home() {
+  return (
+    <main id={MAIN_CONTENT_ID} tabIndex={-1} className="outline-none">
+      <Scene />
+    </main>
+  );
 }

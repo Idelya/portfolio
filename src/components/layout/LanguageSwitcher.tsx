@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
 
   return (
     <nav aria-label={t("label")}>
-      <ul className="flex gap-3">
+      <ul className="flex">
         {routing.locales.map((locale) => (
           <li key={locale}>
             <Link
@@ -23,9 +23,12 @@ export function LanguageSwitcher() {
               lang={locale}
               hrefLang={locale}
               aria-current={locale === currentLocale ? "page" : undefined}
-              className="underline-offset-4 hover:underline aria-[current=page]:font-bold"
+              className="flex size-11 items-center justify-center rounded-lg text-sm text-ink-muted uppercase hover:bg-surface aria-[current=page]:font-bold aria-[current=page]:text-ink"
             >
-              {t(`locales.${locale}`)}
+              {/* Locale codes keep the header narrow at 360px. The full name is added for screen
+                  readers; the visible code stays part of the accessible name (WCAG 2.5.3). */}
+              {locale}
+              <span className="sr-only"> {t(`locales.${locale}`)}</span>
             </Link>
           </li>
         ))}

@@ -88,11 +88,11 @@ src/
   features/
     scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
       Scene.tsx             # server component: opening frame + hub below (static, linkable)
-      SceneAnimator.tsx     # client island: scroll progress → layer transforms
+      SceneAnimator.tsx     # client island: scroll progress → layer transforms (not built yet)
       layers/               # Sky, Mountains, Branch, Ground… (inline SVG components)
-      cat/                  # cat animation wrapper
-      objects/              # interactive objects (Mailbox, SkillTree…) and easter eggs
-      config.ts             # layer depths, aspect-ratio layouts, object positions, scroll keyframes
+      cat/                  # cat art / animation wrapper
+      objects/              # SceneObject (link + label), ObjectArt (per-object art), easter eggs
+      config.ts             # aspect-ratio layouts, object positions and sizes (later: depths, keyframes)
       *.test.ts             # pure logic tests (keyframe math, layout selection)
     projects/               # ProjectCard, ProjectList, ProjectDetail, getProjects.ts
     experience/
@@ -133,6 +133,10 @@ tests/
 ```
 
 ### Module boundaries
+
+Enforced by `no-restricted-imports` rules in `eslint.config.mjs` (one rule set per directory,
+generated per folder in `src/features/`). Cross-module imports use the `@/` alias; relative imports
+are for files within the same module.
 
 | Module          | May import from                                         | Must not import from                                          |
 | --------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
@@ -192,8 +196,11 @@ and that slugs are unique.
 - No locale cookie (`localeCookie: false`): `/` always follows `Accept-Language`, and the site sets no cookies.
 - Message keys are type-checked against `en.json` (`src/global.d.ts`). `messages.test.ts` fails when a
   key is missing or empty in any locale.
-- Every page and layout under `[locale]` calls `setRequestLocale(locale)` before using translations,
-  so pages stay statically rendered.
+- The locale is read from the `[locale]` root segment with `next/root-params` in `src/i18n/request.ts`
+  (which also returns 404 for unknown locales). Pages and layouts don't take `params` for the locale:
+  use `getLocale()` / `getTranslations("ns")` without a locale. `setRequestLocale` is deprecated, don't
+  use it. `[locale]/layout.tsx` is the root layout: never add `app/layout.tsx`. Server Actions and Route
+  Handlers have no root params yet, so pass the locale explicitly there (`getTranslations({ locale, namespace })`).
 
 ## SEO building blocks
 
