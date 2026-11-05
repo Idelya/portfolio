@@ -1,1 +1,125 @@
 @import "tailwindcss";
+
+/*
+ * Design tokens. Placeholder "magical night" palette (navy, violet, pink, sky blue, golden glow);
+ * expected to change as the illustrations evolve. Change values here only: components use the
+ * semantic tokens below, never the raw scales or hex values.
+ * Contrast of semantic pairs is checked by src/app/tokens.test.ts.
+ */
+@theme {
+  /* Drop Tailwind's default palette so only project colors exist. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Raw scales */
+  --color-midnight-50: #eef1fb;
+  --color-midnight-100: #dbe1f5;
+  --color-midnight-200: #b7c2ea;
+  --color-midnight-300: #8a9bd8;
+  --color-midnight-400: #5f74c0;
+  --color-midnight-500: #4256a3;
+  --color-midnight-600: #334384;
+  --color-midnight-700: #27336a;
+  --color-midnight-800: #1c2552;
+  --color-midnight-900: #131a3d;
+  --color-midnight-950: #0b1029;
+
+  --color-iris-50: #f5f1ff;
+  --color-iris-100: #ebe3ff;
+  --color-iris-200: #d6c7ff;
+  --color-iris-300: #b9a0fb;
+  --color-iris-400: #9b78f3;
+  --color-iris-500: #8055e6;
+  --color-iris-600: #6c3fd1;
+  --color-iris-700: #5a32ad;
+  --color-iris-800: #4a2b8c;
+  --color-iris-900: #3c2570;
+  --color-iris-950: #24154a;
+
+  --color-blush-50: #fdf2f8;
+  --color-blush-100: #fbe4f1;
+  --color-blush-200: #f8c9e4;
+  --color-blush-300: #f2a0cd;
+  --color-blush-400: #e86fb0;
+  --color-blush-500: #d94a94;
+  --color-blush-600: #bf3279;
+  --color-blush-700: #9e2663;
+  --color-blush-800: #822353;
+  --color-blush-900: #6b2147;
+  --color-blush-950: #420d28;
+
+  --color-azure-50: #eefaff;
+  --color-azure-100: #d8f2ff;
+  --color-azure-200: #b5e8ff;
+  --color-azure-300: #7fd9ff;
+  --color-azure-400: #42c2fb;
+  --color-azure-500: #18a7ea;
+  --color-azure-600: #0a86c6;
+  --color-azure-700: #0b6ba0;
+  --color-azure-800: #0f5a84;
+  --color-azure-900: #124b6d;
+  --color-azure-950: #0c3048;
+
+  --color-glow-50: #fffbea;
+  --color-glow-100: #fff3c4;
+  --color-glow-200: #ffe78a;
+  --color-glow-300: #ffd64d;
+  --color-glow-400: #ffc423;
+  --color-glow-500: #f5a70a;
+  --color-glow-600: #d98105;
+  --color-glow-700: #b45c08;
+  --color-glow-800: #92470e;
+  --color-glow-900: #783b0f;
+  --color-glow-950: #451d03;
+
+  /*
+   * Semantic tokens: light-dark(<light theme>, <dark theme>), resolved by the color-scheme of
+   * the element. v1 ships dark only (see the base layer); light values are kept ready for the
+   * theme toggle planned in ROADMAP Phase 5.
+   */
+  --color-canvas: light-dark(var(--color-iris-50), var(--color-midnight-950));
+  --color-surface: light-dark(var(--color-white), var(--color-midnight-900));
+  --color-ink: light-dark(var(--color-midnight-950), var(--color-iris-50));
+  --color-ink-muted: light-dark(
+    var(--color-midnight-700),
+    var(--color-midnight-200)
+  );
+  --color-line: light-dark(var(--color-iris-200), var(--color-midnight-700));
+  --color-primary: light-dark(var(--color-iris-600), var(--color-iris-300));
+  --color-on-primary: light-dark(var(--color-white), var(--color-midnight-950));
+  --color-accent: light-dark(var(--color-blush-600), var(--color-blush-300));
+  --color-link: light-dark(var(--color-iris-700), var(--color-azure-300));
+  --color-focus: light-dark(var(--color-blush-600), var(--color-glow-300));
+  --color-glow: light-dark(var(--color-glow-400), var(--color-glow-300));
+
+  /* Typography: variables set by next/font in src/app/fonts.ts */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Effects */
+  --shadow-glow: 0 0 1.5rem
+    color-mix(in oklab, var(--color-glow) 60%, transparent);
+  --ease-magic: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+  :root {
+    /* Dark only for v1, regardless of the system setting. The theme toggle will switch this. */
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-focus;
+  }
+}

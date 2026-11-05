@@ -37,6 +37,8 @@ next-env.d.ts
 
 
 .claude/settings.local.json
+# third-party inspiration images: not ours to publish
+.claude/inspo/
 
 # playwright
 /test-results/

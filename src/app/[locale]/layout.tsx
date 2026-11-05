@@ -7,6 +7,8 @@ import type { ReactNode } from "react";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { routing } from "@/i18n/routing";
 
+import { fontVariables } from "../fonts";
+
 import "../globals.css";
 
 interface LocaleLayoutProps {
@@ -42,7 +44,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>
           {/* Temporary placement: moves into NavMenu with the root layout task (ROADMAP Phase 2). */}

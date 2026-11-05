@@ -82,7 +82,9 @@ src/
     sitemap.ts              # sitemap with hreflang alternates
     robots.ts
     opengraph-image.tsx     # generated OG images
-    globals.css             # Tailwind import + design tokens (@theme)
+    globals.css             # Tailwind import + design tokens (@theme), base styles
+    fonts.ts                # next/font definitions (CSS variables used by the font tokens)
+    tokens.test.ts          # WCAG contrast of semantic color tokens, light and dark
   features/
     scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
       Scene.tsx             # server component: opening frame + hub below (static, linkable)

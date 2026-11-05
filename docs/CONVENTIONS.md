@@ -37,10 +37,16 @@ Where code goes and what may import what: [ARCHITECTURE.md](ARCHITECTURE.md#dire
 - Formatting is Prettier's job (`npm run format`); class order is sorted automatically, don't hand-sort.
 - Tailwind utility classes in JSX. Extract a component, not a CSS class, when a pattern repeats.
 - Design tokens (colors, fonts, spacing scale, radii) defined once in `globals.css` via `@theme`.
-  No raw hex values in components.
+  No raw hex values in components. Tailwind's default palette is removed: only project colors exist.
+- Components use the **semantic** color tokens (`canvas`, `surface`, `ink`, `ink-muted`, `line`,
+  `primary`/`on-primary`, `accent`, `link`, `focus`, `glow`), e.g. `bg-canvas text-ink`. The raw
+  scales (`midnight`, `iris`, `blush`, `azure`, `glow-50…950`) are for scene art and for defining
+  semantic tokens. Adding a semantic text/background pair? Add it to `src/app/tokens.test.ts`.
 - Mobile-first: base classes target small screens, `sm:`/`md:`/`lg:` add up.
-- Dark mode: follow `prefers-color-scheme` (decision pending, see [DECISIONS.md](DECISIONS.md)).
-- Contrast must meet WCAG AA (4.5:1 text, 3:1 large text and UI).
+- Themes: each semantic token is `light-dark(<light>, <dark>)`, resolved by `color-scheme`, so
+  components need no `dark:` variants. v1 is **dark only** (`color-scheme: dark` on `:root`); keep
+  the light values valid, a light theme with a toggle comes later (see [DECISIONS.md](DECISIONS.md)).
+- Contrast must meet WCAG AA (4.5:1 text, 3:1 large text and UI). `src/app/tokens.test.ts` checks the semantic pairs in both themes.
 
 ## Git
 

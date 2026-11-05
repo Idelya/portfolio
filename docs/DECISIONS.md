@@ -5,6 +5,32 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-05 — Dark theme only for v1; light theme with a toggle later
+
+- **Decision:** v1 renders only the dark theme (`color-scheme: dark` on `:root`), regardless of the
+  system setting. A light theme with a manual toggle in the nav menu comes in a later phase.
+- **Why:** Owner's choice: the night palette fits the scene, and one theme keeps the first phase
+  (skeleton, illustrations) simpler.
+- **Consequences:** Semantic tokens keep their light values, and the contrast test still checks
+  both themes, so the toggle only has to switch `color-scheme` on `<html>` (and add a Tailwind
+  `dark` custom variant if art needs one). Open for then: system default vs. dark default, and
+  whether the scene gets a day version.
+
+### 2026-11-05 — Design tokens: placeholder magical palette, semantic tokens with light-dark()
+
+- **Decision:** Palette of navy (`midnight`), violet (`iris`), pink (`blush`), sky blue (`azure`) and a
+  golden accent (`glow`, fireflies and interactive highlights), after the owner's inspiration images.
+  Tailwind's default palette is removed. Components use semantic tokens whose values are
+  `light-dark(<light>, <dark>)`, resolved by `color-scheme` (dark only for now, see the entry
+  above). Fonts: Fraunces (headings) and Nunito (body) via `next/font/google`, both with `latin-ext`.
+- **Why:** The owner wants a light and a dark theme in violet, pink, navy and blue, and will change
+  the palette as the illustrations evolve. With semantic tokens, a palette change happens in one file,
+  and a unit test keeps WCAG AA contrast in both themes. `light-dark()` avoids duplicating each
+  token for the dark theme and is supported by all target browsers.
+- **Consequences:** Palette and fonts are placeholders, expected to change. A manual theme toggle
+  would set `color-scheme` on `<html>` (no token changes needed) and add a matching Tailwind `dark`
+  custom variant.
+
 ### 2026-11-03 — i18n: no locale cookie, hreflang only from metadata
 
 - **Decision:** next-intl routing with `localeCookie: false` and `alternateLinks: false`. The install
@@ -163,6 +189,5 @@ otherwise question or redo. Format: date, decision, why, consequences.
 - Scene open questions ([GAME_DESIGN.md](GAME_DESIGN.md#open-questions-owner-to-answer)).
 - Source of final illustrations (own, commissioned, generated/packs).
 - Email service for the contact form (e.g. Resend) and destination address.
-- Dark mode: system-following only, or with a manual toggle? (May instead be a night version of the scene.)
 - Analytics: none, or privacy-friendly (Vercel Analytics / Plausible)? Affects cookie banner needs.
 - Custom domain name.

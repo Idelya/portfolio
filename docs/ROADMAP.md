@@ -31,7 +31,7 @@ Each item should be a small, reviewable change (one branch / PR).
 
 - [x] next-intl with `en`/`pl`, locale routing (`src/proxy.ts` redirect for `/`), language switcher
       (switcher sits in a temporary header until the root layout task moves it into the nav menu)
-- [ ] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
+- [x] Design tokens (fairy-tale palette, typography, spacing) + fonts via `next/font`
 - [ ] Root layout: persistent nav menu (mobile menu button), footer, skip link
 - [ ] Metadata helpers, `sitemap.ts`, `robots.ts`, OG image, JSON-LD `Person`
 - [ ] Folder structure per ARCHITECTURE.md: `features/`, route groups `(scene)` and `(pages)`, ESLint import-boundary rule
@@ -69,6 +69,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] Page transitions between scene and subpages
 - [ ] Remaining easter eggs, ambient animations, optional sound
 - [ ] Cat mascot on subpages
+- [ ] Light theme + theme toggle in the nav menu (tokens already hold light values; see DECISIONS.md)
 - [ ] Performance tuning of art assets on mobile
 
 ## Later
