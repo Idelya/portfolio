@@ -5,6 +5,31 @@ otherwise question or redo. Format: date, decision, why, consequences.
 
 ---
 
+### 2026-11-05 — Parallax with CSS scroll-driven animations (provisional)
+
+- **Decision:** The descent is CSS only: a sticky backdrop (sky, mountains, forest) whose layers
+  rise by `--depth` × the scroll distance, and the opening frame and hub scrolling in front of it.
+  `parallax` / `parallax-fade` utilities in `globals.css` run `scene-parallax` on
+  `animation-timeline: scroll(root)`, only with `prefers-reduced-motion: no-preference` and
+  `@supports (animation-timeline: scroll())`. Only `translate` and `opacity` are animated.
+- **Why:** The owner asked for parallax now. No dependency; native engine runs on the compositor;
+  the static composition is the fallback for reduced motion and no JS. The two-section layout with an opaque hub left an empty band and hid the
+  mountains, so the backdrop became sticky.
+- **Fallback (2026-11-12):** the owner's Firefox (136) has no CSS scroll timelines, and a static
+  scene there is not acceptable. `features/scene/SceneAnimator.tsx` (client island, ~1 KB) runs only
+  when `CSS.supports("animation-timeline: scroll()")` is false: it writes the scroll progress to
+  `--scene-progress` on the scene root (`data-scene-root`, not `<html>`, to keep style recalculation
+  small) once per frame, the layers get `will-change` so frames only re-composite (Firefox stuttered
+  while repainting the large SVGs), and the same `parallax` utilities turn it into the
+  same `translate`/`opacity` via `@supports not (…)`. Native animations get a `1ms` duration because
+  Firefox 159+ ignores scroll-driven animations with a zero duration. An e2e test checks the backdrop
+  rises in every Playwright browser (Firefox there has no native support) and stays still with
+  reduced motion.
+- **Consequences:** The Phase 3 spike still has to confirm smoothness on a real mid-range phone and
+  iOS Safari, and pick the cat animation runtime (it can reuse the progress `SceneAnimator` computes). Layer depths depend on the page scrolling exactly
+  one stage height; keep the scene the only scroll content of the home page. `translate` on parallax
+  layers overrides Tailwind `translate-*` utilities on the same element.
+
 ### 2026-11-05 — Static scene: placeholder SVG, objects sized by min(width, height)
 
 - **Decision:** The home page renders the static composition on the server: the opening frame

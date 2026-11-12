@@ -6,20 +6,20 @@
 
 ## Stack
 
-| Concern         | Choice                                                                                                              | Notes                                                                                                                                                       |
-| --------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework       | **Next.js 16** (App Router)                                                                                         | Static generation by default.                                                                                                                               |
-| UI              | **React 19**                                                                                                        | Server Components by default, `"use client"` only where needed.                                                                                             |
-| Language        | **TypeScript 6.0**, `strict: true`                                                                                  | No `any` without a comment explaining why. Capped below 6.1 by `typescript-eslint`, see [DECISIONS.md](DECISIONS.md).                                       |
-| Styling         | **Tailwind CSS 4**                                                                                                  | CSS-first config: no `tailwind.config.js`, PostCSS via `@tailwindcss/postcss`. Design tokens in CSS (`@theme`), no inline style objects for static styling. |
-| i18n            | **next-intl**                                                                                                       | PL + EN, locale-prefixed routes.                                                                                                                            |
-| Scene animation | **TBD** (see [GAME_DESIGN.md](GAME_DESIGN.md#technology-open-decision))                                             | DOM/SVG layers. Scroll: CSS scroll-driven animations, Motion or GSAP. Cat: Rive, Lottie or sprite sheet.                                                    |
-| Contact form    | Server Action + email service (**TBD**, e.g. Resend)                                                                | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit).                                                                       |
-| Unit tests      | **Vitest** + Testing Library                                                                                        | Logic, hooks, content validation.                                                                                                                           |
-| E2E tests       | **Playwright**                                                                                                      | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md).                                                                                              |
-| Lint / format   | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + **Prettier** (`prettier-plugin-tailwindcss`) | Run directly with `eslint`; `next lint` no longer exists. `eslint-config-prettier` disables stylistic lint rules.                                           |
-| Hosting         | **Vercel**                                                                                                          | Preview deploy per PR, production from `master`.                                                                                                            |
-| Runtime         | **Node.js 26 LTS**                                                                                                  | Pinned in `.nvmrc` and `engines.node` (`26.x`, which Vercel also reads).                                                                                    |
+| Concern         | Choice                                                                                                                                                                            | Notes                                                                                                                                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework       | **Next.js 16** (App Router)                                                                                                                                                       | Static generation by default.                                                                                                                               |
+| UI              | **React 19**                                                                                                                                                                      | Server Components by default, `"use client"` only where needed.                                                                                             |
+| Language        | **TypeScript 6.0**, `strict: true`                                                                                                                                                | No `any` without a comment explaining why. Capped below 6.1 by `typescript-eslint`, see [DECISIONS.md](DECISIONS.md).                                       |
+| Styling         | **Tailwind CSS 4**                                                                                                                                                                | CSS-first config: no `tailwind.config.js`, PostCSS via `@tailwindcss/postcss`. Design tokens in CSS (`@theme`), no inline style objects for static styling. |
+| i18n            | **next-intl**                                                                                                                                                                     | PL + EN, locale-prefixed routes.                                                                                                                            |
+| Scene animation | Parallax: **CSS scroll-driven animations** (provisional) with a ~1 KB JS fallback (`SceneAnimator`); cat: **TBD** (see [GAME_DESIGN.md](GAME_DESIGN.md#technology-open-decision)) | DOM/SVG layers. Scroll: CSS scroll-driven animations, Motion or GSAP. Cat: Rive, Lottie or sprite sheet.                                                    |
+| Contact form    | Server Action + email service (**TBD**, e.g. Resend)                                                                                                                              | Validation with a schema library (e.g. Zod), spam protection (honeypot + rate limit).                                                                       |
+| Unit tests      | **Vitest** + Testing Library                                                                                                                                                      | Logic, hooks, content validation.                                                                                                                           |
+| E2E tests       | **Playwright**                                                                                                                                                                    | Multiple viewports and browsers, see [QUALITY.md](QUALITY.md).                                                                                              |
+| Lint / format   | **ESLint 9** flat config (`eslint.config.mjs`, `eslint-config-next`) + **Prettier** (`prettier-plugin-tailwindcss`)                                                               | Run directly with `eslint`; `next lint` no longer exists. `eslint-config-prettier` disables stylistic lint rules.                                           |
+| Hosting         | **Vercel**                                                                                                                                                                        | Preview deploy per PR, production from `master`.                                                                                                            |
+| Runtime         | **Node.js 26 LTS**                                                                                                                                                                | Pinned in `.nvmrc` and `engines.node` (`26.x`, which Vercel also reads).                                                                                    |
 
 Exact versions live in `package.json`. Do not add a dependency without a reason; prefer the platform
 and existing libraries. Record notable additions in [DECISIONS.md](DECISIONS.md).
@@ -88,8 +88,8 @@ src/
   features/
     scene/                  # home scene; imported only by app/[locale]/(scene)/page.tsx
       Scene.tsx             # server component: opening frame + hub below (static, linkable)
-      SceneAnimator.tsx     # client island: scroll progress → layer transforms (not built yet)
-      layers/               # Sky, Mountains, Branch, Ground… (inline SVG components)
+      SceneAnimator.tsx     # client island: scroll progress → CSS var; parallax fallback where CSS scroll timelines are missing
+      layers/               # Layer (shared canvas), Sky, Mountains, Branch, Ground; procedural.ts (placeholder art generators)
       cat/                  # cat art / animation wrapper
       objects/              # SceneObject (link + label), ObjectArt (per-object art), easter eggs
       config.ts             # aspect-ratio layouts, object positions and sizes (later: depths, keyframes)
@@ -104,7 +104,7 @@ src/
       schema.ts             # shared validation schema (client + server)
   components/
     ui/                     # generic primitives with no business logic (Button, Link, Card, Icon)
-    layout/                 # NavMenu, PageHeader, Footer, LanguageSwitcher, SkipLink
+    layout/                 # NavMenu (+ NavLink, MenuCloser client leaves), sections.ts, PageHeader, Footer, LanguageSwitcher, SkipLink
   content/
     types.ts                # Project, Experience, Skill, Profile, Localized…
     profile.ts

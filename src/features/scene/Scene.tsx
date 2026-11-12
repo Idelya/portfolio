@@ -5,27 +5,41 @@ import { profile } from "@/content/profile";
 import { SCENE_OBJECTS } from "./config";
 import { Branch } from "./layers/Branch";
 import { Ground } from "./layers/Ground";
-import { Mountains } from "./layers/Mountains";
+import { FarMountains, MidMountains, NearForest } from "./layers/Mountains";
 import { Sky } from "./layers/Sky";
 import { SceneObject } from "./objects/SceneObject";
+import { SceneAnimator } from "./SceneAnimator";
 
 export const HUB_ID = "hub";
 
-// Server-rendered static composition: the p = 0 opening frame, then the hub in normal document
-// flow. This is also the no-JS and reduced-motion version; the scroll animation (ROADMAP Phase 3)
-// will enhance it on the client without changing what is rendered here.
+// Server-rendered composition: a sticky backdrop (sky, mountains, forest) behind two screens in
+// normal document flow, the p = 0 opening frame and the hub. Parallax comes from the `parallax`
+// utilities in globals.css (native CSS scroll timelines, with SceneAnimator as the JS fallback).
+// All layer depths live here: backdrop layers rise slowly (negative), the branch scrolls away
+// faster, the title lags and fades. With reduced motion nothing moves: the static composition.
 export function Scene() {
   const t = useTranslations("scene");
   const tNav = useTranslations("nav.links");
 
   return (
-    <>
-      <section className="relative isolate h-[calc(100svh-var(--spacing-header))] min-h-[28rem] overflow-hidden">
-        <Sky />
-        <Mountains />
-        <Branch />
-        <div className="relative flex h-full flex-col items-center justify-center px-4 pb-24 text-center">
-          <h1 className="font-display text-4xl font-semibold text-balance text-iris-50 sm:text-6xl">
+    <div data-scene-root className="relative isolate overflow-clip">
+      <SceneAnimator />
+      <div aria-hidden="true" className="sticky top-header h-stage">
+        <Sky className="parallax [--depth:-0.05]" />
+        <FarMountains className="parallax [--depth:-0.28]" />
+        <MidMountains className="parallax [--depth:-0.36]" />
+        <NearForest className="parallax [--depth:-0.45]" />
+      </div>
+
+      <section className="relative -mt-stage h-stage overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 parallax [--depth:-0.25]"
+        >
+          <Branch />
+        </div>
+        <div className="relative flex h-full parallax-fade flex-col items-center justify-center px-4 pb-24 text-center [--depth:0.4]">
+          <h1 className="font-display text-4xl font-semibold text-balance text-iris-50 [text-shadow:0_2px_16px_var(--color-midnight-950)] sm:text-6xl">
             <span className="block">{profile.name}</span>
             <span className="mt-2 block text-xl font-normal text-blush-200 sm:text-2xl">
               {t("titleSuffix")}
@@ -35,7 +49,7 @@ export function Scene() {
         <a
           href={`#${HUB_ID}`}
           aria-label={t("toHub")}
-          className="absolute bottom-6 left-1/2 flex size-12 -translate-x-1/2 items-center justify-center rounded-full text-iris-50 hover:bg-midnight-800"
+          className="absolute inset-x-0 bottom-6 mx-auto flex size-12 parallax-fade items-center justify-center rounded-full text-iris-50 hover:bg-midnight-800"
         >
           <svg
             aria-hidden="true"
@@ -55,7 +69,7 @@ export function Scene() {
       <section
         id={HUB_ID}
         aria-label={t("hubLabel")}
-        className="relative isolate h-[calc(100svh-var(--spacing-header))] scroll-mt-header overflow-hidden"
+        className="relative h-below-header scroll-mt-header overflow-hidden"
       >
         <Ground />
         {/* Size container: objects are sized in cqw/cqh of the hub. */}
@@ -70,6 +84,6 @@ export function Scene() {
           ))}
         </ul>
       </section>
-    </>
+    </div>
   );
 }

@@ -4,9 +4,12 @@ import { expect, test } from "./fixtures";
 
 const SECTIONS = ["About", "Projects", "Experience", "Skills", "Contact"];
 
-// Below Tailwind's lg breakpoint the section links sit in a popover behind the menu button.
+// Tailwind's lg breakpoint (NavMenu.tsx): below it the section links sit in a popover behind
+// the menu button.
+const LG_BREAKPOINT_PX = 1024;
+
 function isCompact(page: Page) {
-  return (page.viewportSize()?.width ?? 0) < 1024;
+  return (page.viewportSize()?.width ?? 0) < LG_BREAKPOINT_PX;
 }
 
 test.describe("skip link", () => {

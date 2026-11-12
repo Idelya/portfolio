@@ -1,19 +1,11 @@
-"use client";
-
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 
 import { LanguageSwitcher } from "./LanguageSwitcher";
-
-const SECTIONS = [
-  "about",
-  "projects",
-  "experience",
-  "skills",
-  "contact",
-] as const;
+import { MenuCloser } from "./MenuCloser";
+import { NavLink } from "./NavLink";
+import { SECTIONS } from "./sections";
 
 const MENU_ID = "site-menu";
 
@@ -21,26 +13,19 @@ interface NavMenuProps {
   siteName: string;
 }
 
-// Client component for usePathname (aria-current) and closing the mobile menu after a link is
-// followed. Everything is server-rendered: the mobile menu is a native popover opened by
-// popovertarget, so it also works without JavaScript (Esc and tapping outside close it).
+// Server component. The mobile menu is a native popover opened by popovertarget, so it works
+// without JavaScript (Esc and tapping outside close it); NavLink (aria-current) and MenuCloser
+// are the only client parts.
 export function NavMenu({ siteName }: NavMenuProps) {
   const t = useTranslations("nav");
-  const pathname = usePathname();
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Client-side navigation keeps this layout mounted, so the open popover must be closed by hand.
-  function closeMenu() {
-    const menu = menuRef.current;
-    if (menu?.matches(":popover-open")) menu.hidePopover();
-  }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/85 backdrop-blur-md">
-      <div className="mx-auto flex h-header max-w-6xl items-center gap-1 px-4">
+    // h-header includes the border, so the bar is exactly --spacing-header tall: the scene's
+    // sticky stage (top-header) then starts flush below it and never shifts on the first scroll.
+    <header className="sticky top-0 z-40 h-header border-b border-line bg-canvas/85 backdrop-blur-md">
+      <div className="mx-auto flex h-full max-w-6xl items-center gap-1 px-4">
         <Link
           href="/"
-          onClick={closeMenu}
           className="mr-auto flex min-h-11 items-center rounded-lg font-display text-lg font-semibold whitespace-nowrap"
         >
           {siteName}
@@ -70,31 +55,23 @@ export function NavMenu({ siteName }: NavMenuProps) {
               UA rule that hides closed popovers). */}
           <div
             id={MENU_ID}
-            ref={menuRef}
             popover="auto"
             className="inset-x-0 top-header bottom-auto m-0 w-full border-0 border-b border-line bg-surface p-4 text-ink shadow-lg lg:static lg:block lg:w-auto lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none"
           >
             <ul className="flex flex-col gap-1 lg:flex-row">
-              {SECTIONS.map((section) => {
-                const href = `/${section}`;
-                const isCurrent =
-                  pathname === href || pathname.startsWith(`${href}/`);
-
-                return (
-                  <li key={section}>
-                    <Link
-                      href={href}
-                      onClick={closeMenu}
-                      aria-current={isCurrent ? "page" : undefined}
-                      className="flex min-h-11 items-center rounded-lg px-3 hover:bg-surface aria-[current=page]:font-bold aria-[current=page]:text-accent"
-                    >
-                      {t(`links.${section}`)}
-                    </Link>
-                  </li>
-                );
-              })}
+              {SECTIONS.map((section) => (
+                <li key={section}>
+                  <NavLink
+                    href={`/${section}`}
+                    className="flex min-h-11 items-center rounded-lg px-3 hover:bg-surface aria-[current=page]:font-bold aria-[current=page]:text-accent"
+                  >
+                    {t(`links.${section}`)}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </div>
+          <MenuCloser menuId={MENU_ID} />
         </nav>
 
         <LanguageSwitcher />

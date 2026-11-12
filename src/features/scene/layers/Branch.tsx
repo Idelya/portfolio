@@ -7,7 +7,6 @@ export function Branch() {
     <svg
       viewBox="0 0 600 240"
       aria-hidden="true"
-      data-layer="branch"
       className="absolute top-[14%] left-0 w-[min(70vw,36rem)] text-midnight-950"
     >
       <path

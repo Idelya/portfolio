@@ -43,7 +43,7 @@ Each item should be a small, reviewable change (one branch / PR).
 - [ ] Owner answers GAME_DESIGN.md open questions (object → section mapping first)
 - [ ] Spike: scroll technology (CSS scroll-driven vs Motion vs GSAP) on a real mid-range phone + iOS Safari; record decision
 - [x] Static scene (server-rendered): `p = 0` opening frame + hub below, placeholder SVG layers, objects as links, reduced-motion / no-JS version
-- [ ] Scroll sequence: descent + parallax layers
+- [x] Scroll sequence: descent + parallax layers (CSS scroll-driven, sticky backdrop; confirm in the spike)
 - [ ] Cat placeholder animation: idle on branch → jump → land → idle (scrubbed by scroll)
 - [ ] Interactive objects: idle glow/motion, hover/focus state, click reaction + navigation
 - [ ] Aspect-ratio layouts (tall portrait, portrait, landscape, ultra-wide) with rearranged objects; start this early, it is the hardest part

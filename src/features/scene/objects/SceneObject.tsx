@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 import { Link } from "@/i18n/navigation";
 
-import type { SceneObjectConfig } from "../config";
+import type { Placement, SceneObjectConfig } from "../config";
 import { ObjectArt } from "./ObjectArt";
 
 interface SceneObjectProps {
@@ -13,27 +13,29 @@ interface SceneObjectProps {
   label: string;
 }
 
+// CSS variables for one layout's placement. Width uses container query units of the hub list:
+// min(width % of the hub width, widthByHeight % of the hub height), see config.ts.
+function placementVars(p: Placement, suffix: "l" | "p") {
+  return {
+    [`--x-${suffix}`]: `${p.x}%`,
+    [`--y-${suffix}`]: `${p.y}%`,
+    [`--w-${suffix}`]: `min(${p.width}cqw, ${p.widthByHeight}cqh)`,
+  };
+}
+
 // A hub object: a real link (art + always-visible label). Position comes from config.ts per
-// layout through CSS variables; Tailwind's portrait/landscape variants pick the set. Sizes use
-// container query units of the hub list (cqw/cqh), see the width rule in config.ts.
+// layout through CSS variables; Tailwind's portrait/landscape variants pick the set.
 export function SceneObject({ object, name, label }: SceneObjectProps) {
-  const { landscape, portrait } = object.placement;
-  const position = {
-    "--x-l": `${landscape.x}%`,
-    "--y-l": `${landscape.y}%`,
-    "--w-l": landscape.width,
-    "--wh-l": landscape.widthByHeight,
-    "--x-p": `${portrait.x}%`,
-    "--y-p": `${portrait.y}%`,
-    "--w-p": portrait.width,
-    "--wh-p": portrait.widthByHeight,
+  const style = {
+    ...placementVars(object.placement.landscape, "l"),
+    ...placementVars(object.placement.portrait, "p"),
     "--aspect": `1 / ${object.aspect}`,
   } as CSSProperties;
 
   return (
     <li
-      style={position}
-      className="absolute bottom-(--y-l) left-(--x-l) w-[min(calc(var(--w-l)*1cqw),calc(var(--wh-l)*1cqh))] -translate-x-1/2 portrait:bottom-(--y-p) portrait:left-(--x-p) portrait:w-[min(calc(var(--w-p)*1cqw),calc(var(--wh-p)*1cqh))]"
+      style={style}
+      className="absolute bottom-(--y-l) left-(--x-l) w-(--w-l) -translate-x-1/2 portrait:bottom-(--y-p) portrait:left-(--x-p) portrait:w-(--w-p)"
     >
       <Link
         href={`/${object.section}`}

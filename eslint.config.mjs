@@ -1,4 +1,5 @@
 import { readdirSync } from "node:fs";
+import { join } from "node:path";
 
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
@@ -17,7 +18,10 @@ const restrict = (files, regex, message, ignores = []) => ({
   },
 });
 
-const features = readdirSync("src/features", { withFileTypes: true })
+// Resolved from this file, so editor integrations running elsewhere find the folder too.
+const features = readdirSync(join(import.meta.dirname, "src/features"), {
+  withFileTypes: true,
+})
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name);
 

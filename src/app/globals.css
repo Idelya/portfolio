@@ -99,6 +99,10 @@
 
   /* Layout */
   --spacing-header: 3.5rem; /* nav bar height: h-header, top-header, scroll-mt-header */
+  /* One screen below the nav bar (h-below-header: the scene hub). */
+  --spacing-below-header: calc(100svh - var(--spacing-header));
+  /* Scene stage: the same, never shorter than 28rem (h-stage, -mt-stage). */
+  --spacing-stage: max(28rem, var(--spacing-below-header));
 
   /* Effects */
   --shadow-glow: 0 0 1.5rem
@@ -131,5 +135,64 @@
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-focus;
+  }
+}
+
+/*
+ * Scene parallax. Progress p goes 0 → 1 over the page scroll (the home page scrolls exactly one
+ * stage height, so that is the descent to the hub). A layer moves by --depth × p × its own height
+ * on top of the page scroll: positive lags behind the page, negative moves ahead of it; layers in
+ * the sticky backdrop use negative values so they rise. Only `translate` and `opacity` animate.
+ *
+ * Two engines, same numbers:
+ * - native CSS scroll-driven animations where supported (compositor, no JS). The 1ms duration
+ *   is needed by Firefox, which ignores scroll-driven animations with a zero duration;
+ * - otherwise features/scene/SceneAnimator.tsx writes p to --scene-progress on the scene root.
+ *   will-change gives each layer its own compositor layer there, so a frame only re-composites the
+ *   layers instead of repainting the large SVGs (that repaint made Firefox stutter).
+ * With reduced motion, or without both, nothing moves and the static composition stays.
+ */
+@keyframes scene-parallax {
+  to {
+    translate: 0 calc(var(--depth, 0) * 100%);
+  }
+}
+
+@keyframes scene-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@utility parallax {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      animation: scene-parallax 1ms linear both;
+      animation-timeline: scroll(root block);
+    }
+    @supports not (animation-timeline: scroll()) {
+      translate: 0 calc(var(--depth, 0) * var(--scene-progress, 0) * 100%);
+      will-change: translate;
+    }
+  }
+}
+
+/* Parallax plus a fade over the first 40% of the descent (title, down arrow). */
+@utility parallax-fade {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      animation:
+        scene-parallax 1ms linear both,
+        scene-fade-out 1ms linear both;
+      animation-timeline: scroll(root block), scroll(root block);
+      animation-range:
+        0% 100%,
+        0% 40%;
+    }
+    @supports not (animation-timeline: scroll()) {
+      translate: 0 calc(var(--depth, 0) * var(--scene-progress, 0) * 100%);
+      opacity: clamp(0, 1 - var(--scene-progress, 0) / 0.4, 1);
+      will-change: translate, opacity;
+    }
   }
 }

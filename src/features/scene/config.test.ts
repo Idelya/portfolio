@@ -1,32 +1,41 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  LABEL_HEIGHT_PX,
   SCENE_OBJECTS,
   type SceneLayout,
   type SceneObjectConfig,
 } from "./config";
 
-// Hub sizes (viewport minus the 56px header) per layout, from the viewport matrix in
-// GAME_DESIGN.md plus the extremes of each orientation (near-square windows, short phones).
-const REFERENCE_HUBS: Record<SceneLayout, { width: number; height: number }[]> =
-  {
-    portrait: [
-      { width: 360, height: 684 }, // 360×740
-      { width: 390, height: 788 }, // 390×844
-      { width: 393, height: 603 }, // iPhone 15 in Playwright (393×659)
-      { width: 768, height: 968 }, // 768×1024
-      { width: 700, height: 744 }, // near-square portrait window
-    ],
-    landscape: [
-      { width: 740, height: 304 }, // 740×360 phone
-      { width: 1024, height: 712 },
-      { width: 1280, height: 744 },
-      { width: 1920, height: 1024 },
-      { width: 2560, height: 1024 },
-      { width: 800, height: 744 }, // near-square landscape window
-    ],
-  };
+// --spacing-header in globals.css (3.5rem): the hub is one screen below the nav bar.
+const HEADER_PX = 56;
+// Label under each object in SceneObject.tsx: text-sm line (20) + py-0.5 (4) + gap-1 (4),
+// plus 4px of slack for font metrics. The e2e overlap test checks the real boxes.
+const LABEL_HEIGHT_PX = 32;
+
+interface Hub {
+  width: number;
+  height: number;
+}
+
+// Viewports per layout, from the matrix in GAME_DESIGN.md plus the extremes of each orientation
+// (near-square windows, short phones).
+const VIEWPORTS: Record<SceneLayout, Hub[]> = {
+  portrait: [
+    { width: 360, height: 740 },
+    { width: 390, height: 844 },
+    { width: 393, height: 659 }, // iPhone 15 in Playwright
+    { width: 768, height: 1024 },
+    { width: 700, height: 800 }, // near-square portrait window
+  ],
+  landscape: [
+    { width: 740, height: 360 }, // phone
+    { width: 1024, height: 768 },
+    { width: 1280, height: 800 },
+    { width: 1920, height: 1080 },
+    { width: 2560, height: 1080 },
+    { width: 800, height: 800 }, // near-square landscape window
+  ],
+};
 
 // Keeps high objects clear of the nav menu area (GAME_DESIGN.md "safe zone at the top").
 const SAFE_TOP_PX = 48;
@@ -37,11 +46,6 @@ interface Box {
   right: number;
   top: number;
   bottom: number;
-}
-
-interface Hub {
-  width: number;
-  height: number;
 }
 
 function box(object: SceneObjectConfig, layout: SceneLayout, hub: Hub): Box {
@@ -69,7 +73,10 @@ function overlaps(a: Box, b: Box) {
 }
 
 const cases = (["landscape", "portrait"] as const).flatMap((layout) =>
-  REFERENCE_HUBS[layout].map((hub) => ({ layout, hub })),
+  VIEWPORTS[layout].map(({ width, height }) => ({
+    layout,
+    hub: { width, height: height - HEADER_PX },
+  })),
 );
 
 describe.each(cases)(

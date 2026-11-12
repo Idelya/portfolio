@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { expect, test } from "./fixtures";
 
 const OBJECTS = [
@@ -15,7 +17,7 @@ function sceneTests() {
 
     await expect(title).toHaveText(/Anna Papros-Matejuk/);
     await expect(title).toBeInViewport();
-    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    await expect(title).toHaveCount(1);
   });
 
   test("down arrow leads to the hub, where every object is a visible link", async ({
@@ -71,4 +73,41 @@ test.describe("scene without JavaScript", () => {
 test.describe("scene with reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
   sceneTests();
+});
+
+test.describe("scene parallax", () => {
+  // Top of the mid mountain layer, relative to the screen: the backdrop is sticky, so any change
+  // comes from the parallax (native CSS or the SceneAnimator fallback, depending on the browser).
+  const layerTop = (page: Page) =>
+    page
+      .getByTestId("mid-mountains")
+      .evaluate((el) => el.getBoundingClientRect().top);
+  const scrollToEnd = (page: Page) =>
+    page.evaluate(() =>
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
+    );
+
+  test("backdrop rises as the visitor scrolls down", async ({ page }) => {
+    await page.goto("/en");
+    const start = await layerTop(page);
+    const height = page.viewportSize()!.height;
+
+    await scrollToEnd(page);
+
+    await expect.poll(() => layerTop(page)).toBeLessThan(start - height * 0.2);
+  });
+
+  test.describe("with reduced motion", () => {
+    test.use({ reducedMotion: "reduce" });
+
+    test("backdrop stays still", async ({ page }) => {
+      await page.goto("/en");
+      const start = await layerTop(page);
+
+      await scrollToEnd(page);
+      await page.waitForTimeout(200);
+
+      expect(Math.abs((await layerTop(page)) - start)).toBeLessThan(1);
+    });
+  });
 });

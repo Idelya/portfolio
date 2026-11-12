@@ -24,8 +24,9 @@ The game feeling comes from discovery, motion and reactive objects, not from con
 
 ## The scroll sequence (home page)
 
-The scene is a sticky, full-viewport stage. Scroll progress `p` (0 → 1) over roughly **3 viewport
-heights (proposal)** drives all animation. After `p = 1` the page stops scrolling: the ground hub is the end.
+The scene is a sticky, full-viewport stage. Scroll progress `p` (0 → 1) over **one stage height**
+(`--spacing-stage`, currently; may grow when the cat's jump needs more room) drives all animation.
+After `p = 1` the page stops scrolling: the ground hub is the end.
 
 | Progress        | Camera / background                                                                                                    | Cat                                                                                                              | Foreground                                                                     | UI                                                                          |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
@@ -154,17 +155,32 @@ use the same dimensions, anchors and file names as the final art, so swapping as
 
 Canvases used by the placeholders (keep them, or update the components and `config.ts` together):
 
-| Asset                                     | Canvas (viewBox)            | Anchor / crop                                              |
-| ----------------------------------------- | --------------------------- | ---------------------------------------------------------- |
-| Sky (stars, moon; gradient behind in CSS) | 1920×1080                   | top center, cropped (`xMidYMin slice`)                     |
-| Far mountains, mid mountains, near hills  | 1920×1080 each              | bottom center, cropped (`xMidYMax slice`)                  |
-| Branch with the cat                       | 600×240                     | left edge, about 14% from the top, up to 70vw / 36rem wide |
-| Hub ground (back hill + meadow)           | 1920×1080                   | bottom center, cropped                                     |
-| Signpost / skill tree / cat on boulder    | 100×140 / 100×110 / 100×100 | object box; height ÷ width = `aspect` in `config.ts`       |
-| Treasure chest / mailbox                  | 100×75 / 100×150            | object box                                                 |
+| Asset                                                   | Canvas (viewBox)            | Anchor / crop                                                             |
+| ------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------- |
+| Sky (stars, moon, horizon glow; gradient behind in CSS) | 1920×1080                   | backdrop, top center, cropped (`xMidYMin slice`)                          |
+| Far mountains, mid mountains, near forest               | 1920×1080 each              | backdrop, bottom center, cropped (`xMidYMax slice`)                       |
+| Branch with the cat                                     | 600×240                     | opening frame, left edge, about 14% from the top, up to 70vw / 36rem wide |
+| Hub ground (forest edge + meadow, transparent above)    | 1920×1080                   | hub, bottom center, cropped                                               |
+| Signpost / skill tree / cat on boulder                  | 100×140 / 100×110 / 100×100 | object box; height ÷ width = `aspect` in `config.ts`                      |
+| Treasure chest / mailbox                                | 100×75 / 100×150            | object box                                                                |
 
 Keep important content of 1920×1080 layers inside the middle third horizontally: tall phones show
 only a narrow vertical slice of them. Objects are separate files, scaled to their box.
+
+**Scene structure and parallax (implemented, placeholder art).** A sticky **backdrop** (sky, far
+mountains, mid mountains, near forest) stays on screen for the whole descent and rises slowly: each
+layer by a fraction of the scroll distance (`--depth`, far layers least). In front of it, two screens
+scroll normally: the transparent **opening frame** (branch with the cat moving a bit faster than the
+page, title and down arrow lagging and fading out) and the **hub** (forest edge and meadow, transparent
+at the top so the backdrop's sky and mountains stay visible above the trees). So the final hub shows
+the mountains over the forest, and the frontmost backdrop layer has a solid bleed below its canvas so
+no gap opens while the hub scrolls in. Browsers without CSS scroll-driven animations (e.g. Firefox
+before 159) get the same movement from `SceneAnimator` (JS writes the progress to `--scene-progress`).
+With reduced motion or without JS nothing moves; the hub then shows the sky over the forest
+(mountains stay low, behind the trees).
+Current depths (all set in `features/scene/Scene.tsx`): sky −0.05, far −0.28, mid −0.36, near forest −0.45, branch −0.25 (faster), title 0.4
+(lags). The placeholder mountains, forests and stars come from seeded generators in
+`features/scene/layers/procedural.ts`.
 
 - Separate layers per depth: sky, far mountains, mid mountains, near hills, branch, ground, each object, cat.
 - Vector (SVG) where the style allows; otherwise PNG/WebP at 2× the largest display size, transparent background.
@@ -176,11 +192,11 @@ only a narrow vertical slice of them. Objects are separate files, scaled to thei
 
 The scene is DOM/SVG based (no WebGL needed). To be decided with a spike:
 
-| Concern                | Candidates                                                                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Scroll-driven parallax | CSS scroll-driven animations (`animation-timeline`, no JS, check Safari support) · Motion (`useScroll`/`useTransform`) · GSAP ScrollTrigger |
-| Cat animation          | Rive (state machines, scrubbable, small files) · Lottie · CSS sprite sheet                                                                  |
-| Page transitions       | View Transitions API (Next.js support) · Motion                                                                                             |
+| Concern                                                                   | Candidates                                                                                                                                  |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scroll-driven parallax (CSS scroll-driven animations in use, provisional) | CSS scroll-driven animations (`animation-timeline`, no JS, check Safari support) · Motion (`useScroll`/`useTransform`) · GSAP ScrollTrigger |
+| Cat animation                                                             | Rive (state machines, scrubbable, small files) · Lottie · CSS sprite sheet                                                                  |
+| Page transitions                                                          | View Transitions API (Next.js support) · Motion                                                                                             |
 
 Record the choice in [DECISIONS.md](DECISIONS.md).
 

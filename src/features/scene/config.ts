@@ -1,3 +1,5 @@
+import type { Section } from "@/components/layout/sections";
+
 // Scene composition data: which objects exist, where they lead and where they sit per layout.
 // Positions live here, not in CSS, so layouts can be tuned (and tested) in one place.
 
@@ -6,11 +8,7 @@ export type SceneLayout = "landscape" | "portrait";
 export type SceneObjectId =
   "signpost" | "skillTree" | "cat" | "chest" | "mailbox";
 
-// Nav sections an object can lead to (keys of `nav.links` in the messages).
-export type SceneSection =
-  "about" | "projects" | "experience" | "skills" | "contact";
-
-interface Placement {
+export interface Placement {
   /** Horizontal center, % of the hub width. */
   x: number;
   /** Bottom edge of the object (label included), % of the hub height from the bottom. */
@@ -26,7 +24,7 @@ interface Placement {
 
 export interface SceneObjectConfig {
   id: SceneObjectId;
-  section: SceneSection;
+  section: Section;
   /** Art height / width; matches the viewBox of the object's SVG. */
   aspect: number;
   placement: Record<SceneLayout, Placement>;
@@ -85,6 +83,3 @@ export const SCENE_OBJECTS: readonly SceneObjectConfig[] = [
     },
   },
 ];
-
-/** Height of an object label in px (text-sm line + vertical padding + gap), used by layout checks. */
-export const LABEL_HEIGHT_PX = 32;
